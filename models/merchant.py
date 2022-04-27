@@ -1,8 +1,8 @@
-class Merchants ():
+class Merchant ():
     
-    def __init__(self, name, activated = True, filter = True, id)
+    def __init__(self, name, activated = True, filtered = True, id= None):
         self.name = name
         self.activated = activated
-        self.filter = filter
+        self.filter = filtered
         self.id = id
     
