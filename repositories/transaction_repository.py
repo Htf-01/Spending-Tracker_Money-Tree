@@ -8,8 +8,9 @@ import repositories.merchant_repository as merchant_repository
 # CREATE
 ###############################################################
 def save(transaction):
-    sql = "INSERT INTO transactions(transaction_date,merchant_id,category_id,amount) VALUES ( %s,%s,%s,%s ) RETURNING id"
-    values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount]
+    sql = "INSERT INTO transactions(transaction_date,merchant_id,category_id,amount,budget_id) VALUES ( %s,%s,%s,%s,%s) RETURNING id"
+    budget_id = select_budget(transaction.budget_selector)
+    values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount, budget_id]
     results = run_sql( sql, values )
     transaction.id = results[0]['id']
 
@@ -40,12 +41,27 @@ def select(id):
         transaction = Transaction(result['transaction_date'], merchant, result['amount'],category, id)
     return transaction
 
+def select_budget(dates):
+    budget_id = None
+    sql = '''SELECT id FROM budgets 
+    WHERE Extract(month FROM budget_date) = %s AND
+    extract(YEAR FROM budget_date) = %s'''
+
+    values = [(dates[0]),(dates[1])]
+    result = run_sql(sql,values)[0]
+    
+    if result is not None:
+        budget_id = result['id']
+    return budget_id
+
 # UPDATE
 ###############################################################
 def update(transaction):
     sql = "UPDATE transactions SET (transaction_date,merchant_id,category_id,amount) = ( %s,%s,%s,%s ) WHERE id = %s"
     values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount, transaction.id]
     run_sql(sql, values)
+    
+
 
 # DELETE
 ###############################################################
@@ -53,3 +69,4 @@ def update(transaction):
 def delete_all():
     sql = "DELETE FROM transactions"
     run_sql(sql)
+    

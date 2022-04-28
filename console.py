@@ -13,13 +13,11 @@ transaction_repository.delete_all()
 category1 = Category('Groceries')
 category_repository.save(category1)
 
-merchant1 = Category('Tesco')
+merchant1 = Merchant('Tesco')
 merchant_repository.save(merchant1)
 
 transaction1 = Transaction('2022-04-27', merchant1, 999, category1)
 transaction_repository.save(transaction1)
 
-transaction2 = Transaction('2022-04-27', merchant1, 500, category1)
+transaction2 = Transaction('2022-05-27', merchant1, 500, category1)
 transaction_repository.save(transaction2)
-
-breakpoint()

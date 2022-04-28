@@ -40,6 +40,18 @@ def update(merchant):
     values = [merchant.name, merchant.activated, merchant.filtered, merchant.id]
     run_sql(sql, values)
     
+def update_activated(merchant):
+    sql = "UPDATE merchants SET activated = (%s) WHERE id = %s"
+    merchant.flip_activated()
+    values = [merchant.activated, merchant.id]
+    run_sql(sql, values)
+
+def update_filtered(merchant):
+    sql = "UPDATE merchants SET filtered = (%s) WHERE id = %s"
+    merchant.flip_filtered()
+    values = [merchant.filtered, merchant.id]
+    run_sql(sql, values)
+
 # DELETE
 ###############################################################
 def delete_all():

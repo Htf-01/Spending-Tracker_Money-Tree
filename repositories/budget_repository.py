@@ -1,12 +1,12 @@
 # Imports
 from db.run_sql import run_sql
-from models.category import Category
+from models.budget import Budget
 
 # CREATE
 ###############################################################
-def save(category):
-    sql = "INSERT INTO categories(name,activated,filtered) VALUES ( %s,%s,%s ) RETURNING id"
-    values = [category.name, category.activated, category.filtered]
+def save(budget):
+    sql = "INSERT INTO budgets (date) VALUE ( %s) RETURNING id"
+    values = [budget.date]
     results = run_sql( sql, values )
     category.id = results[0]['id']
 
@@ -33,6 +33,20 @@ def select(id):
         category = Category(result['name'], result['activated'], result['filtered'], result['id'])
     return category
 
+
+def select_budget(dates):
+    budget_id = None
+    sql = '''SELECT id FROM budgets 
+    WHERE month(date) = %s AND YEAR(date) = %s'''
+    values = [dates[0],dates[1]]
+    result = run_sql(sql, values)[0]
+
+    if result is not None:
+        budget_id = result['id']
+    return budget_id
+
+
+
 # UPDATE
 ###############################################################
 def update(category):
@@ -40,20 +54,5 @@ def update(category):
     values = [category.name, category.activated, category.filtered, category.id]
     run_sql(sql, values)
     
-def update_activated(category):
-    sql = "UPDATE categories SET activated = (%s) WHERE id = %s"
-    category.flip_activated()
-    values = [category.activated, category.id]
-    run_sql(sql, values)
-
-def update_filtered(category):
-    sql = "UPDATE categories SET filtered = (%s) WHERE id = %s"
-    category.flip_filtered()
-    values = [category.filtered, category.id]
-    run_sql(sql, values)
-
 # DELETE
 ###############################################################
-def delete_all():
-    sql = "DELETE FROM categories"
-    run_sql(sql)
