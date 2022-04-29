@@ -19,7 +19,7 @@ def save(transaction):
 def select_all():
     transactions = []
 
-    sql = "SELECT * FROM transactions"
+    sql = "SELECT * FROM transactions order by id"
     results = run_sql(sql)
 
     for row in results:
@@ -38,7 +38,7 @@ def select(id):
     if result is not None:
         merchant = merchant_repository.select(result['merchant_id'])
         category = category_repository.select(result['category_id'])
-        transaction = Transaction(result['transaction_date'], merchant, result['amount'],category, id)
+        transaction = Transaction(result['transaction_date'], merchant, result['amount'],category, result['budget_id'], id)
     return transaction
 
 def select_budget(date):
@@ -61,10 +61,12 @@ def update(transaction):
     values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount, transaction.id]
     run_sql(sql, values)
     
-
-
 # DELETE
 ###############################################################
+def delete(id):
+    sql = "DELETE FROM transactions WHERE id = %s"
+    values = [id]
+    run_sql(sql, values)
 
 def delete_all():
     sql = "DELETE FROM transactions"

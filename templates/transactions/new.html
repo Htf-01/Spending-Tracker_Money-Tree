@@ -1,40 +1,80 @@
-{% extends "transactions/index.html" %}
+{% extends 'base.html'%}
 {% block content %}
 
-<form action="/transactions" method="post">
-    <div>
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date" required autofocus>
-    </div>
-  
-    <div>
-      <label for="merchant">Merchant:</label>
-      <select name="merchant">
-        {% for merchant in all_merchants %}
-            <option value="{{merchant.id}}">{{merchant.name}}</option>
-        {% endfor %}
-      </select>
-    </div>
 
-    <div>
-        <label for="category">Category:</label>
-        <select name="category">
-            <option value="None">None</option>
-          {% for category in all_categories %}
-              <option value="{{category.id}}">{{category.name}}</option>
-          {% endfor %}
-        </select>
-    </div>
-  
-    <div>
-      <label for="amount">Amount £:</label>
-      <input type="number" name="amount_pounds">
-      <input type="number" name="amount_pence">
-      <!-- <input type="number"> -->
-    </div>
-  
-    <button type="submit">Add Transaction</button>
-  
+<h1>New Transaction</h1>
+<button><a href="transactions/new">Add Transaction</a></button>
+<table>
+<tr>
+  <th>Date</th>
+  <th>Merchant</th>
+  <th>Category</th>
+  <th>Amount</th>
+  <th>Edit Functions</th>
+</tr>
+<tr>
+<!-- content differs here -->
+<tr>
+  <form action="/transactions" method="post">
+    <!-- date picker -->
+    <th><input type="date" id="date" name="date" required autofocus></th>
+    <!-- merchant picker -->
+    <th>
+      <input type="text" id= "merchant" name = "merchant" list="merchants" />
+      <datalist id = "merchants">
+        {% for merchant in all_merchants %}
+          <option value = "{{merchant.name}}"> 
+        {% endfor %}
+      </datalist>
+    </th>
+    <!-- category picker -->
+    <th>
+      <input type="text" id= "category" name = "category" list="categories" />
+      <datalist id = "categories">
+        {% for category in all_categories %}
+          <option value = "{{category.name}}"> 
+        {% endfor %}
+      </datalist>
+    </th>
+    <!-- Amount picker -->
+    <th>
+      <span>£</span>
+      <input type="number" name="amount_pound" class = "pounds" min = "00" max = "99999">
+      <span>.</span>
+      <input type="number" name="amount_pence" class = "pence" min = "00" max = "99">
+    </th>
+    <!-- Confirmation/Submit -->
+    <th>
+      <button><a href="/transactions">Cancel</a></button>
+      <button type="submit">Add Transaction</button>
+    </th>
   </form>
+</tr>
+<!-- content differs here -->
+<div class = "hidden entries">
+  {% for transaction in all_transactions %}
+  <tr class = "transaction row">
+    <td>{{transaction.date_format()}}</td>
+    <td>{{transaction.merchant.name}}</td>
+    <td>{{transaction.category.name}}</t>
+    <td>{{transaction.currency_format()}}</td>
+  <td><a href="">Edit</a> <a href="">Delete</a></td>
+</tr>
+<br>
+{% endfor %}
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Total</td>
+</tr>
+</table>
+</div>
+
+<h1>
+  Hello
+</h1>
+
+
 
 {% endblock %}

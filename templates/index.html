@@ -1,40 +1,45 @@
 {% extends 'base.html'%}
-
 {% block content %}
 
 
 <h1>Hello</h1>
 <!-- New Transaction form in details -->
+<button>Add Transaction</button>
+<table>
+<tr>
+  <th>Date</th>
+  <th>Merchant</th>
+  <th>Category</th>
+  <th>Amount</th>
+  <th>Edit Functions</th>
+</tr>
+<tr>
+<!-- content differs here -->
 
-{% block name %}
-  
-{% endblock %}
-<div class = "Transaction">
-  {% set ns = namespace(balance = 50000) %}
-  {% for transaction in all_transactions %}
-  <ul class="transaction">
-    {% set ns.balance = (ns.balance - transaction.amount) %}
-    <li><a href="">
-      <span>&#9998;</span>
-    </a>
-  </li>
-    <li>
-      <details>
-        <summary><span>&#10005;</span></summary>
-        <form action="">
-          <button type="submit">Confirm Delete</button>
-        </form>
-      </details>
-    </li>
-          <li>{{ns.balance}}</li>
-          <li>{{transaction.id}}</li>
-          <li>{{transaction.date_format()}}</li>
-          <li>{{transaction.merchant.name}}</li>
-          <li>{{transaction.category.name}}</li>
-          <li>{{transaction.currency_format()}}</li>
-  </ul>
-</div>
-  <br>
+
+<!-- content differs here -->
+{% for transaction in all_transactions %}
+<tr class = "transaction row">
+  <td>{{transaction.date_format()}}</td>
+  <td>{{transaction.merchant.name}}</td>
+  <td>{{transaction.category.name}}</t>
+  <td>{{transaction.currency_format()}}</td>
+  <td><a href="">Edit</a> <a href="">Delete</a></td>
+</tr>
+<br>
 {% endfor %}
-<h1>Hello</h1>
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Total</td>
+</tr>
+</table>
+
+<h1>
+  Hello
+</h1>
+
+
+
 {% endblock %}

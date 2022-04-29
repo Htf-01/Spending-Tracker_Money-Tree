@@ -1,113 +1,43 @@
-{% extends "base.html" %}
+{% extends 'base.html'%}
 {% block content %}
 
 
-<h1>Hello</h1>
+<h1>Main Page</h1>
+<button><a href="transactions/new">Add Transaction</a></button>
+<table>
+<tr>
+  <th>Date</th>
+  <th>Merchant</th>
+  <th>Category</th>
+  <th>Amount</th>
+  <th>Edit Functions</th>
+</tr>
+<tr>
 
-<div>
-</div>
-<details>
-  <summary>Add Transaction</summary>
-  <form action="/transactions" method="post" class = "add_form">
-    <!-- Date Picker -->
-    <div>
-      <input type="date" id="date" name="date" required autofocus>
-    </div>
-    <!-- Merchant Picker -->
-    <div>   
-        <input type="text" id= "merchant" name = "merchant" list="merchants" />
-        <datalist id = "merchants">
-          {% for merchant in all_merchants %}
-            <option value = "{{merchant.name}}"> 
-          {% endfor %}
-        </datalist>
-    </div>
-    <!-- Category Picker -->
-    <div>   
-      <input type="text" id= "category" name = "category" list="categories" />
-      <datalist id = "categories">
-        {% for category in all_categories %}
-          <option value = "{{category.name}}"> 
-        {% endfor %}
-      </datalist>
-    </div>
-    <!-- Amount Picker -->
-    <div>
-      <span>£</span>
-      <input type="number" name="amount_pound" class = "pounds" min = "00" max = "99999">
-      <span>.</span>
-      <input type="number" name="amount_pence" class = "pence" min = "00" max = "99">
-    </div>
-    <!-- Submit Button -->
-    <div>
-      <button type="submit">Add Transaction</button>
-    </div>  
-  </form>      
-</details>
-    
-    <div class = "Transaction">
-      
-      {% set ns = namespace(balance = 50000) %}
-      {% for transaction in all_transactions %}
-      {% set ns.balance = (ns.balance - transaction.amount) %}
-      
-      <details class = "Transaction">
-        <summary class="Transaction">
-          <ul class="Transaction">
-            <li><a href=""><span>&#9998;</span></a></li>
-            <li><details>
-                <summary><span>&#10005;</span></summary>
-                <form action="">
-                <button type="submit">Confirm Delete</button>
-                </form>
-                </details>
-            </li>
-          <li>{{ns.balance}}</li>
-          <li>{{transaction.id}}</li>
-          <li>{{transaction.date_format()}}</li>
-          <li>{{transaction.merchant.name}}</li>
-          <li>{{transaction.category.name}}</li>
-          <li>{{transaction.currency_format()}}</li>
-          </ul>
-        </summary>
-        <form action="" class="form">
-          <div>
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required autofocus>
-          </div>
-          
-          <div>
-            <label for="merchant">Merchant:</label>
-            
-            <input type="text" id= "merchant" name = "merchant" list="merchants" />
-            <datalist id = "merchants">
-              <!-- Use % after merchant.id selector to show the controller that this item is already in the database -->
-              {% for merchant in all_merchants %}
-              <option value = "{{merchant}}"> 
-              {% endfor %}
-            </datalist>
-          </div>
-      
-          <div>
-              <label for="category">Category:</label>
-              <select name="category">
-                  <option value="None">None</option>
-                {% for category in all_categories %}
-                    <option value="{{category.id}}">{{category.name}}</option>
-                {% endfor %}
-              </select>
-          </div>
-        
-          <div>
-            <label for="amount">Amount £:</label>
-            <input type="number" name="amount_pound">
-            <input type="number" name="amount_pence">
-          </div>
-          
-          <button type="submit">Edit Transaction</button>
-        </form>
-      </details>
-    </div>
+<div class = "hidden entries">
+  {% for transaction in all_transactions %}
+  <tr class = "transaction row">
+    <td>{{transaction.date_format()}}</td>
+    <td>{{transaction.merchant.name}}</td>
+    <td>{{transaction.category.name}}</t>
+    <td>{{transaction.currency_format()}}</td>
+  <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
+</tr>
+<br>
 {% endfor %}
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td>Total</td>
+</tr>
+</table>
+</div>
 
-  {% endblock %}
+<h1>
+  Hello
+</h1>
+
+
+
+{% endblock %}

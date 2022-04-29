@@ -1,0 +1,40 @@
+{% extends 'base.html'%}
+
+{% block content %}
+
+
+<h1>Hello</h1>
+<!-- New Transaction form in details -->
+
+{% block name %}
+  
+{% endblock %}
+<div class = "Transaction">
+  {% set ns = namespace(balance = 50000) %}
+  {% for transaction in all_transactions %}
+  <ul class="transaction">
+    {% set ns.balance = (ns.balance - transaction.amount) %}
+    <li><a href="">
+      <span>&#9998;</span>
+    </a>
+    </li>
+    <li>
+      <details>
+        <summary><span>&#10005;</span></summary>
+        <form action="">
+          <button type="submit">Confirm Delete</button>
+        </form>
+      </details>
+    </li>
+          <li>{{ns.balance}}</li>
+          <li>{{transaction.id}}</li>
+          <li>{{transaction.date_format()}}</li>
+          <li>{{transaction.merchant.name}}</li>
+          <li>{{transaction.category.name}}</li>
+          <li>{{transaction.currency_format()}}</li>
+  </ul>
+</div>
+  <br>
+{% endfor %}
+<h1>Hello</h1>
+{% endblock %}
