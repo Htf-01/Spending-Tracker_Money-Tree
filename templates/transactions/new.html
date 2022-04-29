@@ -1,0 +1,40 @@
+{% extends "transactions/index.html" %}
+{% block content %}
+
+<form action="/transactions" method="post">
+    <div>
+      <label for="date">Date:</label>
+      <input type="date" id="date" name="date" required autofocus>
+    </div>
+  
+    <div>
+      <label for="merchant">Merchant:</label>
+      <select name="merchant">
+        {% for merchant in all_merchants %}
+            <option value="{{merchant.id}}">{{merchant.name}}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div>
+        <label for="category">Category:</label>
+        <select name="category">
+            <option value="None">None</option>
+          {% for category in all_categories %}
+              <option value="{{category.id}}">{{category.name}}</option>
+          {% endfor %}
+        </select>
+    </div>
+  
+    <div>
+      <label for="amount">Amount £:</label>
+      <input type="number" name="amount_pounds">
+      <input type="number" name="amount_pence">
+      <!-- <input type="number"> -->
+    </div>
+  
+    <button type="submit">Add Transaction</button>
+  
+  </form>
+
+{% endblock %}
