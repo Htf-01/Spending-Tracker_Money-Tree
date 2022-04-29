@@ -5,8 +5,8 @@ from models.category import Category
 # CREATE
 ###############################################################
 def save(category):
-    sql = "INSERT INTO categories(name,activated,filtered) VALUES ( %s,%s,%s ) RETURNING id"
-    values = [category.name, category.activated, category.filtered]
+    sql = "INSERT INTO categories(name,activated) VALUES ( %s,%s) RETURNING id"
+    values = [category.name, category.activated]
     results = run_sql( sql, values )
     category.id = results[0]['id']
     return category.id
@@ -20,7 +20,7 @@ def select_all():
     results = run_sql(sql)
 
     for row in results:
-        category = Category(row['name'], row['activated'], row['filtered'], row['id'])
+        category = Category(row['name'], row['activated'], row['id'])
         categories.append(category)
     return categories
 
@@ -31,7 +31,7 @@ def select(id):
     result = run_sql(sql, values)[0]
 
     if result is not None:
-        category = Category(result['name'], result['activated'], result['filtered'], result['id'])
+        category = Category(result['name'], result['activated'], result['id'])
     return category
 
 def select_by_name(name):
@@ -42,7 +42,7 @@ def select_by_name(name):
     
     if run:
         result = run[0]
-        category = Category(result['name'], result['activated'], result['filtered'], result['id'])
+        category = Category(result['name'], result['activated'], result['id'])
         return category
     else:
         return False
@@ -50,8 +50,8 @@ def select_by_name(name):
 # UPDATE
 ###############################################################
 def update(category):
-    sql = "UPDATE categories SET (name,activated,filtered) = ( %s,%s,%s ) WHERE id = %s"
-    values = [category.name, category.activated, category.filtered, category.id]
+    sql = "UPDATE categories SET (name,activated,filtered) = ( %s,%s) WHERE id = %s"
+    values = [category.name, category.activated, category.id]
     run_sql(sql, values)
     
 def update_activated(category):
@@ -60,11 +60,6 @@ def update_activated(category):
     values = [category.activated, category.id]
     run_sql(sql, values)
 
-def update_filtered(category):
-    sql = "UPDATE categories SET filtered = (%s) WHERE id = %s"
-    category.flip_filtered()
-    values = [category.filtered, category.id]
-    run_sql(sql, values)
 
 # DELETE
 ###############################################################

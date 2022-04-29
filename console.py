@@ -21,5 +21,3 @@ transaction_repository.save(transaction1)
 
 transaction2 = Transaction('2022-05-27', merchant1, 500, category1)
 transaction_repository.save(transaction2)
-
-breakpoint()

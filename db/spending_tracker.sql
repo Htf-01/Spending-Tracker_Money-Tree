@@ -6,15 +6,15 @@ DROP TABLE budgets;
 CREATE TABLE merchants (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255),
-  activated BOOLEAN,
-  filtered BOOLEAN
+  activated BOOLEAN
 );
+
 CREATE TABLE categories (
   id SERIAL PRIMARY KEY,
   name VARCHAR(255),
-  activated BOOLEAN,
-  filtered BOOLEAN
+  activated BOOLEAN
 );
+
 CREATE TABLE budgets (
   id SERIAL PRIMARY KEY,
   budget_date date
