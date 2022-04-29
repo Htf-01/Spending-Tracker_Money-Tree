@@ -1,22 +1,28 @@
 from datetime import datetime
+from time import strftime
 
 class Transaction ():
     
-    def __init__(self, date, merchant, amount, category = None, id = None):
-        self.date = date                  # date picker format = YYYY-MM-DD
+    def __init__(self, date, merchant, amount, category = None, budget_id = None, id = None):
+        self.date = Transaction.string_to_date(date)                  # date picker format = YYYY-MM-DD
         self.merchant = merchant
         self.amount = amount
         self.category = category
         self.id = id
-        self.budget_selector = self.date_conversion()
+        self.budget_id = budget_id
         
         
-    def amount_to_string(self):
+    def currency_format(self):
         return f'£{(self.amount/100):.2f}'
     
-    def date_conversion(self):
-        conversion = datetime.strptime(self.date,'%Y-%m-%d')
-        return [conversion.strftime('%m'),conversion.strftime('%Y')]
+    def date_format(self):
+        return f'{self.date.day}-{self.date.month}-{self.date.year}'
+    
+    def string_to_date(date):
+        if isinstance(date,str):
+            return datetime.date(datetime.strptime(date,'%Y-%m-%d'))
+        else:
+            return date
     
     
         

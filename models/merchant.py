@@ -6,6 +6,9 @@ class Merchant ():
         self.filtered = filtered
         self.id = id
         
+    def __str__(self):
+        return self.name
+        
     def flip_activated (self):
         if self.activated:
             self.activated = False

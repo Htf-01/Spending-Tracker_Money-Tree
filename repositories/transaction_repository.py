@@ -8,9 +8,9 @@ import repositories.merchant_repository as merchant_repository
 # CREATE
 ###############################################################
 def save(transaction):
-    sql = "INSERT INTO transactions(transaction_date,merchant_id,category_id,amount,budget_id) VALUES ( %s,%s,%s,%s,%s) RETURNING id"
-    budget_id = select_budget(transaction.budget_selector)
-    values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount, budget_id]
+    sql = "INSERT INTO transactions(transaction_date,merchant_id,category_id,amount, budget_id) VALUES ( %s,%s,%s,%s,%s) RETURNING id"
+    transaction.budget_id = select_budget(transaction.date)
+    values = [transaction.date, transaction.merchant.id, transaction.category.id, transaction.amount, transaction.budget_id]
     results = run_sql( sql, values )
     transaction.id = results[0]['id']
 
@@ -25,7 +25,7 @@ def select_all():
     for row in results:
         merchant = merchant_repository.select(row['merchant_id'])
         category = category_repository.select(row['category_id'])
-        transaction = Transaction(row['transaction_date'], merchant, row['amount'], category, row['id'])
+        transaction = Transaction(row['transaction_date'], merchant, row['amount'], category,row['budget_id'], row['id'])
         transactions.append(transaction)
     return transactions
 
@@ -41,13 +41,13 @@ def select(id):
         transaction = Transaction(result['transaction_date'], merchant, result['amount'],category, id)
     return transaction
 
-def select_budget(dates):
+def select_budget(date):
     budget_id = None
     sql = '''SELECT id FROM budgets 
     WHERE Extract(month FROM budget_date) = %s AND
     extract(YEAR FROM budget_date) = %s'''
 
-    values = [(dates[0]),(dates[1])]
+    values = [date.month,date.year]
     result = run_sql(sql,values)[0]
     
     if result is not None:

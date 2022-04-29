@@ -9,6 +9,7 @@ def save(category):
     values = [category.name, category.activated, category.filtered]
     results = run_sql( sql, values )
     category.id = results[0]['id']
+    return category.id
 
 # READ
 ###############################################################
@@ -32,6 +33,19 @@ def select(id):
     if result is not None:
         category = Category(result['name'], result['activated'], result['filtered'], result['id'])
     return category
+
+def select_by_name(name):
+
+    sql = "Select * from categories where name = %s"
+    values = [name]
+    run = run_sql(sql, values)
+    
+    if run:
+        result = run[0]
+        category = Category(result['name'], result['activated'], result['filtered'], result['id'])
+        return category
+    else:
+        return False
 
 # UPDATE
 ###############################################################

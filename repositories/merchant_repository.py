@@ -9,6 +9,7 @@ def save(merchant):
     values = [merchant.name, merchant.activated, merchant.filtered]
     results = run_sql( sql, values )
     merchant.id = results[0]['id']
+    return merchant.id
 
 # READ
 ###############################################################
@@ -33,6 +34,20 @@ def select(id):
         merchant = Merchant(result['name'], result['activated'], result['filtered'], result['id'])
     return merchant
 
+def select_by_name(name):
+
+    sql = "Select * from merchants where name = %s"
+    values = [name]
+    run = run_sql(sql, values)
+    
+    if run:
+        result = run[0]
+        merchant = Merchant(result['name'], result['activated'], result['filtered'], result['id'])
+        return merchant
+    else:
+        return False
+    
+    
 # UPDATE
 ###############################################################
 def update(merchant):
