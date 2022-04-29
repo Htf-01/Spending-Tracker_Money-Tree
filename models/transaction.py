@@ -16,7 +16,7 @@ class Transaction ():
         return f'£{(self.amount/100):.2f}'
     
     def date_format(self):
-        return f'{self.date.day}-{self.date.month}-{self.date.year}'
+        return f'{self.date.day:02d}-{self.date.month:02d}-{self.date.year}'
     
     def string_to_date(date):
         if isinstance(date,str):
