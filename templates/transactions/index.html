@@ -4,15 +4,18 @@
 
 <h1>Main Page</h1>
 <button><a href="transactions/new">Add Transaction</a></button>
+
+<h1>This one</h1>
 <table>
-<tr>
-  <th>Date</th>
-  <th>Merchant</th>
-  <th>Category</th>
-  <th>Amount</th>
-  <th>Edit Functions</th>
-</tr>
-<tr>
+  <form action="/transactions/sort" method = "post">
+    <tr>
+      <th><button type="submit" name="button" value = "transaction_date">Date</button></th>
+      <th><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
+      <th><button type="submit" name="button" value = "category_id">Category</button></th>
+      <th><button type="submit" name="button" value = "amount">Amount</button></th>
+      <th>Edit Functions</th>
+    </tr>
+  </form>
 
 <div class = "hidden entries">
   {% for transaction in all_transactions %}

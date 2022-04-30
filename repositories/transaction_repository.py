@@ -18,9 +18,20 @@ def save(transaction):
 ###############################################################
 def select_all():
     transactions = []
-
-    sql = "SELECT * FROM transactions order by id"
+    if Transaction.sort == 'transaction_date':
+        sql = "SELECT * FROM transactions order by transaction_date desc"
+    elif Transaction.sort == 'merchant_id':
+        sql = '''SELECT t.* FROM transactions as t join merchants as m
+                on t.merchant_id = m.id order by m.name'''
+    elif Transaction.sort == 'category_id':
+        sql = '''SELECT t.* FROM transactions as t join categories as c
+                on t.category_id = c.id order by c.name'''
+    else: 
+        Transaction.sort == 'amount'
+        sql = "SELECT * FROM transactions order by amount desc"
     results = run_sql(sql)
+    
+
 
     for row in results:
         merchant = merchant_repository.select(row['merchant_id'])

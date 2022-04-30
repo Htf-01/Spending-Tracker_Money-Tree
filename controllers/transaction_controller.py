@@ -1,4 +1,3 @@
-from hashlib import new
 from flask import Flask, Blueprint, render_template, redirect, request
 from repositories import transaction_repository
 from repositories import merchant_repository
@@ -31,7 +30,7 @@ def new_transaction():
 # Create
 
 # POST '/tasks'
-@transaction_blueprint.route("/transactions", methods = ['POST'])
+@transaction_blueprint.route("/transactions/new", methods = ['POST'])
 def create_transaction():
     date = request.form['date']
     
@@ -51,8 +50,8 @@ def create_transaction():
     transaction_repository.save(transaction)
     return redirect('/transactions')
 
-
 # Show
+
 # Edit
 @transaction_blueprint.route("/transactions/<id>/edit", methods = ['GET'])
 def edit_transaction(id):
@@ -101,4 +100,14 @@ def delete_confrim(id):
 def delete_transaction(id):
 
     transaction_repository.delete(id)
+    return redirect('/transactions')
+
+
+##################################################
+
+@transaction_blueprint.route("/transactions/sort", methods = ['POST'])
+def sort_transactions():
+    
+    # Which button was pressed
+    Transaction.sort = request.form['button']
     return redirect('/transactions')

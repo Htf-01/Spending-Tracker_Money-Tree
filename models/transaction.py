@@ -3,6 +3,11 @@ from time import strftime
 
 class Transaction ():
     
+    
+    # default sort by value for the select_all function.
+    # Can be changed by html forms
+    sort = 'transaction_date'
+    
     def __init__(self, date, merchant, amount, category = None, budget_id = None, id = None):
         self.date = Transaction.string_to_date(date)                  # date picker format = YYYY-MM-DD
         self.merchant = merchant
