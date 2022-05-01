@@ -24,6 +24,20 @@ def select_all():
         categories.append(category)
     return categories
 
+def select_all_activated():
+    categories = []
+
+    sql = "SELECT * FROM categories where activated = True order by name"
+    results = run_sql(sql)
+
+    for row in results:
+        category = Category(row['name'], row['activated'], row['id'])
+        categories.append(category)
+    return categories
+
+
+
+
 def select(id):
     category = None
     sql = "SELECT * FROM categories WHERE id = %s"

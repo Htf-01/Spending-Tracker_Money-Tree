@@ -16,13 +16,27 @@ def save(merchant):
 def select_all():
     merchants = []
 
-    sql = "SELECT * FROM merchants"
+    sql = "SELECT * FROM merchants order by activated desc, name"
     results = run_sql(sql)
 
     for row in results:
         merchant = Merchant(row['name'], row['activated'], row['id'])
         merchants.append(merchant)
     return merchants
+
+def select_all_activated():
+    merchants = []
+
+    sql = "SELECT * FROM merchants where activated = True order by name"
+    results = run_sql(sql)
+
+    for row in results:
+        merchant = Merchant(row['name'], row['activated'], row['id'])
+        merchants.append(merchant)
+    return merchants
+
+
+
 
 def select(id):
     merchant = None

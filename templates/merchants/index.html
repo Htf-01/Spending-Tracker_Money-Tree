@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+{% block content %}
+
+Create Merchant form
+<details>
+    <summary>Create Merchant</summary>
+    <form action="/merchants" method="post">
+        <input type="text" name ='name'>
+        <input type="submit">
+    </form>
+</details>
+
+<table>
+    <tr>
+        <th>Merchant</th>
+        <th>Activated</th>
+    </tr>
+    {% for merchant in all_merchants %}
+    <tr>
+        <th>{{merchant.name}}</th>
+        <th>
+            <p>{{merchant.id}}</p>
+            <form action="/merchants/{{merchant.id}}" method="post">
+                {% if merchant.activated == True %}
+                    <button type="submit" name="action" value ="action">Deactivate</button>
+                {% else %}
+                    <button type="submit" name="action" value ="action">Activate</button>
+                {% endif %}
+            </form>
+        </th>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}

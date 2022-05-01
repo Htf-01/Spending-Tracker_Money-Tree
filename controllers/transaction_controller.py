@@ -20,14 +20,14 @@ def transactions():
     return render_template("transactions/index.html", all_transactions = transactions)#, all_merchants = merchants, all_categories = categories)
 
 
+# Create
 @transaction_blueprint.route("/transactions/new", methods = ['GET'])
 def new_transaction():
-    merchants = merchant_repository.select_all()
-    categories = category_repository.select_all()
+    merchants = merchant_repository.select_all_activated()
+    categories = category_repository.select_all_activated()
     transactions = transaction_repository.select_all()
     return render_template("transactions/new.html", all_transactions = transactions, all_merchants = merchants, all_categories = categories)
 
-# Create
 
 # POST '/tasks'
 @transaction_blueprint.route("/transactions/new", methods = ['POST'])
@@ -56,8 +56,8 @@ def create_transaction():
 @transaction_blueprint.route("/transactions/<id>/edit", methods = ['GET'])
 def edit_transaction(id):
     transaction = transaction_repository.select(id)
-    merchants = merchant_repository.select_all()
-    categories = category_repository.select_all()
+    merchants = merchant_repository.select_all_activated()
+    categories = category_repository.select_all_activated()
     transactions = transaction_repository.select_all()
     return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories)
 
@@ -91,8 +91,8 @@ def update_transactions(id):
 @transaction_blueprint.route("/transactions/<id>/delete", methods = ['GET'])
 def delete_confrim(id):
     transaction = transaction_repository.select(id)
-    merchants = merchant_repository.select_all()
-    categories = category_repository.select_all()
+    merchants = merchant_repository.select_all_activated()
+    categories = category_repository.select_all_activated()
     transactions = transaction_repository.select_all()
     return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories)
 

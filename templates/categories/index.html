@@ -1,0 +1,36 @@
+{% extends 'base.html'%}
+{% block content %}
+
+Create Category form
+<details>
+    <summary>Create Category</summary>
+    <form action="/categories" method="post">
+        <input type="text" name ='name'>
+        <input type="submit">
+    </form>
+</details>
+
+<table>
+    <tr>
+        <th>Category</th>
+        <th>Activated</th>
+    </tr>
+    {% for category in all_categories %}
+    <tr>
+        <th>{{category.name}}</th>
+        <th>
+            <p>{{category.id}}</p>
+            <form action="/categories/{{category.id}}" method="post">
+                {% if category.activated == True %}
+                    <button type="submit" name="action" value ="action">Deactivate</button>
+                {% else %}
+                    <button type="submit" name="action" value ="action">Activate</button>
+                {% endif %}
+            </form>
+        </th>
+    </tr>
+    {% endfor %}
+</table>
+
+
+{% endblock %}
