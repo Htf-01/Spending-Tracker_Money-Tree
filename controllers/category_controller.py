@@ -17,7 +17,7 @@ def categories():
 
 # New
 
-# Create
+# Create    
 @category_blueprint.route("/categories", methods = ['POST'])
 def create_category():
 
