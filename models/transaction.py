@@ -1,4 +1,5 @@
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class Transaction ():
@@ -28,6 +29,48 @@ class Transaction ():
             return datetime.date(datetime.strptime(date,'%Y-%m-%d'))
         else:
             return date
+        
+  #TEST      
+    def number_to_month(month_number):
+        if isinstance (month_number,int):
+            return datetime.strptime(str(month_number), "%m").strftime("%b")
+        return datetime.strptime(month_number, "%m").strftime("%b")
+    
+    def session_date_display(session):
+        month = datetime.strptime(str((session['current']['month'])), "%m").strftime("%b")
+        year = datetime.strptime(str((session['current']['year'])), "%Y").strftime("%y")
+        return f'{month} {year}'
+    
+    def session_increment(session):
+        date = f'{session["current"]["month"]}-{(session["current"]["year"])}'
+        new_date = (datetime.strptime(date, "%m-%Y")) + relativedelta(months=+1)
+        session['current']['month']=new_date.month
+        session['current']['year']=new_date.year
+        session.modified = True
+    
+    def session_decrement(session):
+        date = f'{session["current"]["month"]}-{(session["current"]["year"])}'
+        new_date = (datetime.strptime(date, "%m-%Y")) + relativedelta(months=-1)
+        session['current']['month']=new_date.month
+        session['current']['year']=new_date.year
+        session.modified = True
+        
+    def session_current(session): 
+        session['current']['month']= session['date']['month']
+        session['current']['year']=session['date']['year']
+        session.modified = True
+        
+    def session_select(session, date_string):
+        new_date = (datetime.strptime(date_string, '%Y-%m'))
+        session['current']['month']= new_date.month
+        session['current']['year']=new_date.year
+        session.modified = True
+                
+        
+
+        
+    
+
     
     
         

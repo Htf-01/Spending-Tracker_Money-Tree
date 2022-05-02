@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, render_template, redirect, request
+from flask import Flask, Blueprint, render_template, redirect, request, session
 from repositories import transaction_repository
 from repositories import merchant_repository
 from repositories import category_repository
@@ -15,7 +15,13 @@ transaction_blueprint = Blueprint("transactions", __name__)
 def transactions():
     transactions = transaction_repository.select_all()
     
-    return render_template("transactions/index.html", all_transactions = transactions)
+    
+
+    date1 = Transaction.session_date_display(session)
+    # breakpoint()
+
+    
+    return render_template("transactions/index.html", all_transactions = transactions, date1 = date1)
 
 
 # Create
@@ -114,4 +120,36 @@ def sort_transactions():
     
     # Which button was pressed
     Transaction.sort = request.form['button']
+    return redirect('/transactions')
+
+#  SESSION HANDLING
+
+@transaction_blueprint.route("/transactions/nextmonth")
+def transactions_next_month():
+    
+    Transaction.session_increment(session)
+    
+    return redirect('/transactions')
+
+@transaction_blueprint.route("/transactions/previousmonth")
+def transactions_previous_month():
+    
+    Transaction.session_decrement(session)
+    
+    return redirect('/transactions')
+
+@transaction_blueprint.route("/transactions/currentmonth")
+def transactions_current_month():
+    
+    Transaction.session_current(session)
+    
+    return redirect('/transactions')
+
+@transaction_blueprint.route("/transactions/month", methods = ['POST'])
+def transactions_select_month():
+    
+    date_string = request.form['date']
+    
+    Transaction.session_select(session,date_string)
+    
     return redirect('/transactions')

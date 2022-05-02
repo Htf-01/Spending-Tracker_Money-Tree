@@ -1,6 +1,27 @@
 {% extends 'base.html'%}
 {% block content %}
 
+<div>
+<h1>Session Data</h1>
+
+<p>session date:{{date}}</p>
+<p>session date:{{date1}}</p>
+
+
+<a href="transactions/nextmonth">Next Month</a>
+<a href="transactions/previousmonth">Previous Month</a>
+<a href="transactions/currentmonth">Current Month</a>
+
+<form action="transactions/month" method = "post">
+  <label for="date">Pick Budget</label>
+  <input type="month" name="date">
+  <button type="submit">submit</button>
+</form>
+
+</div>
+
+
+
 
 <table class = "transactions">
   <tr>

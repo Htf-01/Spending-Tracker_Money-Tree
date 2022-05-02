@@ -25,6 +25,8 @@ class Budget ():
     
     def set_current_budget(id):
         Budget.current_budget = id
+        
+        
     
         
         
