@@ -13,15 +13,16 @@ transaction_blueprint = Blueprint("transactions", __name__)
 
 @transaction_blueprint.route("/transactions")
 def transactions():
-    transactions = transaction_repository.select_all()
+    
+    date = Transaction.session_date_display(session)
+    date_values = Transaction.session_sql_format(session)
+    transactions = transaction_repository.select_all(date_values)
     
     
-
-    date1 = Transaction.session_date_display(session)
+    
     # breakpoint()
 
-    
-    return render_template("transactions/index.html", all_transactions = transactions, date1 = date1)
+    return render_template("transactions/index.html", all_transactions = transactions, date = date)
 
 
 # Create
@@ -115,14 +116,18 @@ def delete_transaction(id):
 
 ##################################################
 
+# SESSION HANDING - SORT
+
 @transaction_blueprint.route("/transactions/sort", methods = ['POST'])
 def sort_transactions():
     
     # Which button was pressed
-    Transaction.sort = request.form['button']
+    sort = request.form['button']
+    Transaction.session_sort(session,sort)
+    
     return redirect('/transactions')
 
-#  SESSION HANDLING
+#  SESSION HANDLING - Month View
 
 @transaction_blueprint.route("/transactions/nextmonth")
 def transactions_next_month():

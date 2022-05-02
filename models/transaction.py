@@ -65,6 +65,15 @@ class Transaction ():
         session['current']['month']= new_date.month
         session['current']['year']=new_date.year
         session.modified = True
+        
+    def session_sql_format(session):
+        month = session['current']['month']
+        year = session['current']['year']
+        return [month, year]
+    
+    def session_sort(session,sort):
+        session['sort']['sort'] = sort
+        session.modified = True        
                 
         
 

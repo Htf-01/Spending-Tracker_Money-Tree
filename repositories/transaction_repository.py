@@ -17,23 +17,33 @@ def save(transaction):
 
 # READ
 ###############################################################
-def select_all():
+def select_all(values,sort):
     transactions = []
-    if Transaction.sort == 'transaction_date':
-        sql = "SELECT * FROM transactions where budget_id = %s order by transaction_date desc"
-    elif Transaction.sort == 'merchant_id':
-        sql = '''SELECT t.* FROM transactions as t join merchants as m
-                on t.merchant_id = m.id where budget_id = %s order by m.name'''
-    elif Transaction.sort == 'category_id':
-        sql = '''SELECT t.* FROM transactions as t join categories as c
-                on t.category_id = c.id where budget_id = %s order by c.name'''
-    else: 
-        Transaction.sort == 'amount'
-        sql = "SELECT * FROM transactions where budget_id = %s order by amount desc"
-    values = [budget_repository.get_current_budget()]
-    results = run_sql(sql, values)
-    
+    if sort == 'transaction_date':
+        sql = '''SELECT * FROM transactions
+                where extract (month from transaction_date) = %s 
+                and extract(year from transaction_date) = %s
+                order by transaction_date desc'''''
+        
+    elif sort == 'merchant_id':
+        sql = '''SELECT * FROM transactions
+                where extract (month from transaction_date) = %s 
+                and extract(year from transaction_date) = %s
+                order by m.name'''''
 
+    elif sort == 'category_id':
+        sql = '''SELECT * FROM transactions
+                where extract (month from transaction_date) = %s 
+                and extract(year from transaction_date) = %s
+                order by c.name'''''
+    else: 
+        sort == 'amount'
+        sql = '''SELECT * FROM transactions
+                where extract (month from transaction_date) = %s 
+                and extract(year from transaction_date) = %s
+                
+                order by amount desc'''
+    results = run_sql(sql, values)
 
     for row in results:
         merchant = merchant_repository.select(row['merchant_id'])

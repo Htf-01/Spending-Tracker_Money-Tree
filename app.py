@@ -11,7 +11,7 @@ from controllers.budget_controller import budget_blueprint
 
 app = Flask(__name__)
 
-app.secret_key = 'BAD_SECRET_KEY0'
+app.secret_key = 'BAD_SECRET_KEY'
 
 # Import Blueprints
 app.register_blueprint(transaction_blueprint)
@@ -24,6 +24,7 @@ def home():
 
     session['date'] = {'month':(Budget.today().month), 'year':(Budget.today().year)}
     session['current'] = {'month':(Budget.today().month), 'year':(Budget.today().year)}
+    session['sort']={'sort':'transaction_date'}
         
     return render_template('index.html')
 
