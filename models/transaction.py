@@ -1,22 +1,15 @@
-from datetime import datetime
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 
 
 class Transaction ():
     
-    
-    # default sort by value for the select_all function.
-    # Can be changed by html forms
-    sort = 'transaction_date'
-    
-    def __init__(self, date, merchant, amount, category = None, budget_id = None, id = None):
+    def __init__(self, date, merchant, amount, category = None, id = None):
         self.date = Transaction.string_to_date(date)                  # date picker format = YYYY-MM-DD
         self.merchant = merchant
         self.amount = amount
         self.category = category
         self.id = id
-        self.budget_id = budget_id
-        
         
     def currency_format(self):
         return f'£{(self.amount/100):.2f}'
@@ -71,10 +64,17 @@ class Transaction ():
         year = session['current']['year']
         return [month, year]
     
-    def session_sort(session,sort):
+    # Sort
+    
+    def session_edit_sort(session,sort):
         session['sort']['sort'] = sort
-        session.modified = True        
-                
+        session.modified = True
+        
+    def session_return_sort(session):
+        return session['sort']['sort']
+    
+    def session_today():
+       return date.today()                
         
 
         

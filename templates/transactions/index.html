@@ -50,7 +50,7 @@
     <td>{{transaction.date_format()}}</td>
     <td>{{transaction.merchant.name}}</td>
     <td>{{transaction.category.name}}</t>
-    <td>{{transaction.currency_format()}}</td>
+    <td>{{transaction.currency_format()}} {{transaction.id}}</td>
     <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
   </tr>
 {% endfor %}

@@ -14,13 +14,11 @@ transaction_blueprint = Blueprint("transactions", __name__)
 @transaction_blueprint.route("/transactions")
 def transactions():
     
+    sort = Transaction.session_return_sort(session)
     date = Transaction.session_date_display(session)
     date_values = Transaction.session_sql_format(session)
-    transactions = transaction_repository.select_all(date_values)
     
-    
-    
-    # breakpoint()
+    transactions = transaction_repository.select_all(date_values, sort)
 
     return render_template("transactions/index.html", all_transactions = transactions, date = date)
 
@@ -28,10 +26,17 @@ def transactions():
 # Create
 @transaction_blueprint.route("/transactions/new", methods = ['GET'])
 def new_transaction():
+    
     merchants = merchant_repository.select_all_activated()
     categories = category_repository.select_all_activated()
-    transactions = transaction_repository.select_all()
-    return render_template("transactions/new.html", all_transactions = transactions, all_merchants = merchants, all_categories = categories)
+    
+    sort = Transaction.session_return_sort(session)
+    date = Transaction.session_date_display(session)
+    date_values = Transaction.session_sql_format(session)
+    
+    transactions = transaction_repository.select_all(date_values, sort)
+
+    return render_template("transactions/new.html", all_transactions = transactions, all_merchants = merchants, all_categories = categories, date=date)
 
 
 # POST '/tasks'
@@ -63,8 +68,14 @@ def edit_transaction(id):
     transaction = transaction_repository.select(id)
     merchants = merchant_repository.select_all_activated()
     categories = category_repository.select_all_activated()
-    transactions = transaction_repository.select_all()
-    return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories)
+    
+    sort = Transaction.session_return_sort(session)
+    date = Transaction.session_date_display(session)
+    date_values = Transaction.session_sql_format(session)
+    
+    transactions = transaction_repository.select_all(date_values, sort)
+
+    return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date =date)
 
 # Update
 @transaction_blueprint.route("/transactions/<id>", methods = ['POST'])
@@ -80,10 +91,6 @@ def update_transactions(id):
     if category == False:
         category = category_repository.select(category_repository.save(Category(request.form['category'])))
         
-        
-        
-    budget_id = transaction_repository.select_budget((Transaction.string_to_date(date)))
-    
     if request.form['amount_pence'] == '0':
         amount_pence = '00'
     else:
@@ -91,7 +98,7 @@ def update_transactions(id):
     
     amount = (request.form['amount_pound']) + amount_pence
     
-    transaction = Transaction(date, merchant,amount,category, budget_id, id)
+    transaction = Transaction(date, merchant,amount,category, id)
 
     transaction_repository.update(transaction)
     return redirect('/transactions')
@@ -104,8 +111,14 @@ def delete_confrim(id):
     transaction = transaction_repository.select(id)
     merchants = merchant_repository.select_all_activated()
     categories = category_repository.select_all_activated()
-    transactions = transaction_repository.select_all()
-    return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories)
+     
+    sort = Transaction.session_return_sort(session)
+    date = Transaction.session_date_display(session)
+    date_values = Transaction.session_sql_format(session)
+    
+    transactions = transaction_repository.select_all(date_values, sort)
+  
+    return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date = date)
 
 @transaction_blueprint.route("/transactions/<id>/delete", methods = ['POST'])
 def delete_transaction(id):
@@ -123,7 +136,7 @@ def sort_transactions():
     
     # Which button was pressed
     sort = request.form['button']
-    Transaction.session_sort(session,sort)
+    Transaction.session_edit_sort(session,sort)
     
     return redirect('/transactions')
 
