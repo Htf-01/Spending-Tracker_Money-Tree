@@ -11,15 +11,10 @@ Create Category form
 </details>
 
 <table>
-    <tr>
-        <th>Category</th>
-        <th>Activated</th>
-    </tr>
     {% for category in all_categories %}
     <tr>
         <th>{{category.name}}</th>
         <th>
-            <p>{{category.id}}</p>
             <form action="/categories/{{category.id}}" method="post">
                 {% if category.activated == True %}
                     <button type="submit" name="action" value ="action">Deactivate</button>
@@ -31,6 +26,5 @@ Create Category form
     </tr>
     {% endfor %}
 </table>
-
 
 {% endblock %}

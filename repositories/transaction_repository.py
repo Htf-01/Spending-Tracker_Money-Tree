@@ -4,6 +4,7 @@ from models.transaction import Transaction
 
 import repositories.category_repository as category_repository
 import repositories.merchant_repository as merchant_repository
+import repositories.budget_repository as budget_repository
 
 # CREATE
 ###############################################################
@@ -19,17 +20,18 @@ def save(transaction):
 def select_all():
     transactions = []
     if Transaction.sort == 'transaction_date':
-        sql = "SELECT * FROM transactions order by transaction_date desc"
+        sql = "SELECT * FROM transactions where budget_id = %s order by transaction_date desc"
     elif Transaction.sort == 'merchant_id':
         sql = '''SELECT t.* FROM transactions as t join merchants as m
-                on t.merchant_id = m.id order by m.name'''
+                on t.merchant_id = m.id where budget_id = %s order by m.name'''
     elif Transaction.sort == 'category_id':
         sql = '''SELECT t.* FROM transactions as t join categories as c
-                on t.category_id = c.id order by c.name'''
+                on t.category_id = c.id where budget_id = %s order by c.name'''
     else: 
         Transaction.sort == 'amount'
-        sql = "SELECT * FROM transactions order by amount desc"
-    results = run_sql(sql)
+        sql = "SELECT * FROM transactions where budget_id = %s order by amount desc"
+    values = [budget_repository.get_current_budget()]
+    results = run_sql(sql, values)
     
 
 

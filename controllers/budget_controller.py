@@ -18,6 +18,7 @@ def budget():
 
 @budget_blueprint.route("/budget/<id>", methods = ['GET'])
 def show_budget(id):
+    # breakpoint()
     
     Budget.set_current_budget(id)
     
@@ -33,8 +34,9 @@ def show_budget(id):
 
 @budget_blueprint.route("/budget/<id>/redirect", methods = ['POST'])
 def redirect_budget(id):
-    
+
     date = Budget.convert_date(request.form['date'])
     budget = budget_repository.select_budget(date)
+
 
     return redirect (f'/budget/{budget}')

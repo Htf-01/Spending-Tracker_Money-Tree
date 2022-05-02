@@ -14,10 +14,8 @@ transaction_blueprint = Blueprint("transactions", __name__)
 @transaction_blueprint.route("/transactions")
 def transactions():
     transactions = transaction_repository.select_all()
-    # merchants = merchant_repository.select_all()
-    # categories = category_repository.select_all()
-    # breakpoint()
-    return render_template("transactions/index.html", all_transactions = transactions)#, all_merchants = merchants, all_categories = categories)
+    
+    return render_template("transactions/index.html", all_transactions = transactions)
 
 
 # Create
@@ -78,7 +76,13 @@ def update_transactions(id):
         
         
     budget_id = transaction_repository.select_budget((Transaction.string_to_date(date)))
-    amount = (request.form['amount_pound']) + (request.form['amount_pence'])
+    
+    if request.form['amount_pence'] == '0':
+        amount_pence = '00'
+    else:
+        amount_pence = request.form['amount_pence']  
+    
+    amount = (request.form['amount_pound']) + amount_pence
     
     transaction = Transaction(date, merchant,amount,category, budget_id, id)
 

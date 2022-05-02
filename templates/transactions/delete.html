@@ -1,14 +1,13 @@
-{% extends 'base.html'%}
-{% block content %}
-
-<table>
-<tr>
-  <th>Date</th>
-  <th>Merchant</th>
-  <th>Category</th>
-  <th>Amount</th>
-  <th>Edit Functions</th>
-</tr>
+<table class = "transactions">
+  <tr>
+    <th class = "col1">
+      <button><a href="/transactions/new">Add Transaction</a></button>
+    </th>
+    <th class = "col2"></th>
+    <th class = "col3"></th>
+    <th class = "col4"></th>
+    <th class = "col5"></th>
+  </tr>
 <!-- Section of table above ID -->
 
 {% set show_transaction = namespace(Tag=0) %}
@@ -34,7 +33,7 @@
   <form action="/transactions/{{transaction.id}}/delete" method="post">
     <td>{{transaction.date_format()}}</td>
     <td>{{transaction.merchant.name}}</td>
-    <td>{{transaction.category.name}}</t>
+    <td>{{transaction.category.name}}</td>
     <td>{{transaction.currency_format()}}</td>
     <td>
       <button><a href="/transactions">Cancel</a></button>
@@ -43,7 +42,7 @@
   </form>
 </tr>
 <!-- end form for ID-->
-<div class = "hidden entries">
+
   <!-- Section of table below ID -->
 
   {% set show_transaction = namespace(Tag=0) %}
@@ -52,7 +51,7 @@
         <tr class = "transaction row">
           <td>{{below_transaction.date_format()}}</td>
           <td>{{below_transaction.merchant.name}}</td>
-          <td>{{below_transaction.Tag}}</t>
+          <td>{{below_transaction.Tag}}</td>
           <td>{{below_transaction.currency_format()}}</td>
           <td><a href="/transactions/{{below_transaction.id}}/edit">Edit</a> <a href="/transactions/{{below_transaction.id}}/delete">Delete</a></td>
         </tr>
@@ -68,5 +67,4 @@
   <td>Total</td>
 </tr>
 </table>
-</div>
-{% endblock %}
+

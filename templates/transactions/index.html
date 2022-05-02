@@ -1,46 +1,45 @@
-{% extends 'budget/current.html'%}
+{% extends 'base.html'%}
 {% block content %}
 
 
-<h1>Main Page</h1>
-<button><a href="transactions/new">Add Transaction</a></button>
+<table class = "transactions">
+  <tr>
+    <th class = "col1">
+      <button><a href="transactions/new">Add Transaction</a></button>
+    </th>
+    <th class = "col2"></th>
+    <th class = "col3"></th>
+    <th class = "col4"></th>
+    <th class = "col5"></th>
+  </tr>
 
-<h1>This one</h1>
-<table>
-  <form action="/transactions/sort" method = "post">
-    <tr>
+
+  <tr class = "transaction_title_row">
+    <form action="/transactions/sort" method = "post">
       <th><button type="submit" name="button" value = "transaction_date">Date</button></th>
       <th><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
       <th><button type="submit" name="button" value = "category_id">Category</button></th>
       <th><button type="submit" name="button" value = "amount">Amount</button></th>
       <th>Edit Functions</th>
-    </tr>
-  </form>
+    </form>
+  </tr>
 
-<div class = "hidden entries">
-  {% for transaction in all_transactions %}
+{% for transaction in all_transactions %}
   <tr class = "transaction row">
     <td>{{transaction.date_format()}}</td>
     <td>{{transaction.merchant.name}}</td>
     <td>{{transaction.category.name}}</t>
     <td>{{transaction.currency_format()}}</td>
-  <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
-</tr>
-<br>
+    <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
+  </tr>
 {% endfor %}
-<tr>
-  <td></td>
-  <td></td>
-  <td></td>
-  <td>Total</td>
-</tr>
+  <tr class = "transaction_row">
+    <td></td>
+    <td></td>
+    <td></td>
+    <td>Total: </td>
+  </tr>
 </table>
-</div>
-
-<h1>
-  Hello
-</h1>
-
 
 
 {% endblock %}
