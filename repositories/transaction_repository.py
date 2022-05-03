@@ -177,6 +177,80 @@ def select_by_group_category(values):
         amount = (row['amount'])
         categories.append([category,amount])
     return categories, total
+
+
+def select_all_merchant(merchant,sort):
+    
+    transactions = []
+    values = [merchant.id]
+ 
+    if sort == 'transaction_date':
+        sql = "SELECT * FROM transactions where merchant_id = %s order by transaction_date desc"
+            
+    elif sort == 'merchant_id':
+        sql = "SELECT * FROM transactions where merchant_id = %s order by transaction_date desc"
+
+    elif sort == 'category_id':
+        sql = '''SELECT * FROM transactions as t
+                JOIN categories as c
+                ON t.category_id = c.id
+                where merchant_id = %s order by c.name'''
+    else: 
+        sort == 'amount'
+        sql = "SELECT * FROM transactions where merchant_id = %s order by amount desc"
+
+    results = run_sql(sql, values)
+    
+    
+    sql_total = '''SELECT sum(amount)
+                FROM transactions
+                where merchant_id = %s'''
+    
+    total = run_sql(sql_total, values)[0]
+
+    for row in results:
+        category = category_repository.select(row['category_id'])
+        transaction = Transaction(row['transaction_date'], merchant, row['amount'],category, id)
+        transactions.append(transaction)
+    return transactions,total
+
+
+def select_all_category(category,sort):
+    
+    transactions = []
+    values = [category.id]
+ 
+    if sort == 'transaction_date':
+        sql = "SELECT * FROM transactions where category_id = %s order by transaction_date desc"
+            
+    elif sort == 'merchant_id':
+        sql = '''SELECT * FROM transactions as t
+                JOIN merchants as m
+                ON t.category_id = m.id
+                where category_id = %s order by m.name'''
+
+
+    elif sort == 'category_id':
+        sql = "SELECT * FROM transactions where category_id = %s order by transaction_date desc"
+    
+    else: 
+        sort == 'amount'
+        sql = "SELECT * FROM transactions where category_id = %s order by amount desc"
+
+    results = run_sql(sql, values)
+    
+    
+    sql_total = '''SELECT sum(amount)
+                FROM transactions
+                where category_id = %s'''
+    
+    total = run_sql(sql_total, values)[0]
+
+    for row in results:
+        merchant = merchant_repository.select(row['merchant_id'])
+        transaction = Transaction(row['transaction_date'], merchant, row['amount'],category, id)
+        transactions.append(transaction)
+    return transactions,total
     
     
     

@@ -35,6 +35,26 @@ def create_category():
     return redirect('/categories')
 
 # Show
+
+@category_blueprint.route("/categories/<id>", methods = ['GET'])
+def show_category(id):
+
+    category = category_repository.select(id)
+    
+    sort = Transaction.session_return_sort(session)
+    transactions = transaction_repository.select_all_category(category,sort)[0]
+    total = transaction_repository.select_all_category(category,sort)[1] 
+    
+
+    
+    return render_template("categories/show.html", category = category, transactions = transactions, total = total)
+
+
+
+
+
+
+
 # Edit
 # Update
 @category_blueprint.route("/categories/<id>", methods = ['POST'])
@@ -47,6 +67,19 @@ def update_category(id):
     return redirect('/categories')
 
 # Delete
+
+# Session Sort
+
+@category_blueprint.route("/categories/<id>/sort", methods = ['POST'])
+def sort_transactions_categories(id):
+    
+    # Which button was pressed
+    sort = request.form['button']
+    Transaction.session_edit_sort(session,sort)
+    
+    return redirect(f'/categories/{id}')
+
+
 
 
 #  SESSION HANDLING - Month View

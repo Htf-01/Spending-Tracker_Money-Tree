@@ -29,7 +29,7 @@ Create Merchant form
 <table>
     {% for merchant in groups %}
     <tr>
-        <th>{{merchant[0].name}}</th>
+        <th><a href="/merchants/{{merchant[0].id}}">{{merchant[0].name}}</a></th>
         <th>
             <form action="/merchants/{{merchant[0].id}}" method="post">
                 {% if merchant[0].activated == True %}

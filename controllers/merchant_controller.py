@@ -38,7 +38,18 @@ def create_merchant():
     return redirect('/merchants')
 
 # Show
+@merchant_blueprint.route("/merchants/<id>", methods = ['GET'])
+def show_merchant(id):
 
+    merchant = merchant_repository.select(id)
+    
+    sort = Transaction.session_return_sort(session)
+    transactions = transaction_repository.select_all_merchant(merchant,sort)[0]
+    total = transaction_repository.select_all_merchant(merchant,sort)[1] 
+
+
+    
+    return render_template("merchants/show.html", merchant = merchant, transactions = transactions, total = total)
 
 
 
@@ -57,6 +68,17 @@ def update_merchant(id):
 
 # Delete
 
+
+# Session Sort
+
+@merchant_blueprint.route("/merchants/<id>/sort", methods = ['POST'])
+def sort_transactions_merchants(id):
+    
+    # Which button was pressed
+    sort = request.form['button']
+    Transaction.session_edit_sort(session,sort)
+    
+    return redirect(f'/merchants/{id}')
 
 # Session Handling
 

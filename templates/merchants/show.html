@@ -1,0 +1,50 @@
+{% extends 'base.html'%}
+{% block content %}
+
+
+
+
+<h1>{{merchant.name}}</h1>
+
+<p>£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</p>
+
+
+
+<table class = "transactions">
+    <tr>
+      <th class = "col1">
+      </th>
+      <th class = "col2"></th>
+      <th class = "col3"></th>
+      <th class = "col4"></th>
+    </tr>
+  
+  
+    <tr class = "transaction_title_row">
+      <form action="/merchants/{{merchant.id}}/sort" method = "post">
+        <th><button type="submit" name="button" value = "transaction_date">Date</button></th>
+        <th><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
+        <th><button type="submit" name="button" value = "category_id">Category</button></th>
+        <th><button type="submit" name="button" value = "amount">Amount</button></th>
+      </form>
+    </tr>
+  
+  {% for transaction in transactions %}
+    <tr class = "transaction row">
+      <td>{{transaction.date_format()}}</td>
+      <td>{{transaction.merchant.name}}</td>
+      <td>{{transaction.category.name}}</td>
+      <td>{{transaction.currency_format()}}</td>
+    </tr>
+  {% endfor %}
+    <tr class = "transaction_row">
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Total:£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</td>
+    </tr>
+  </table>
+</table>
+
+
+{% endblock %}

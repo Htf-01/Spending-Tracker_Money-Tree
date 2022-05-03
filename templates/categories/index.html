@@ -27,7 +27,7 @@ Create Category form
 <table>
     {% for category in groups %}
     <tr>
-        <th>{{category[0].name}}</th>
+        <th><a href="/categories/{{category[0].id}}">{{category[0].name}}</a></th>
         <th>
             <form action="/categories/{{category[0].id}}" method="post">
                 {% if category[0].activated == True %}
