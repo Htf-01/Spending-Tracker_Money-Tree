@@ -23,8 +23,6 @@ def transactions():
     date = Transaction.session_date_display(session)
     date_values = Transaction.session_sql_format(session)
     
-    # breakpoint()
-    
     transactions = transaction_repository.select_all(date_values, sort)
     transactions_list = transactions[0]
     transactions_total = transactions[1]
@@ -88,7 +86,7 @@ def edit_transaction(id):
     transactions_list = transactions[0]
     transactions_total = transactions[1] 
 
-    return render_template('transactions/edit.html', transaction = transactions_list, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date =date, total = transactions_total)
+    return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date =date, total = transactions_total)
 
 # Update
 @transaction_blueprint.route("/transactions/<id>", methods = ['POST'])
@@ -133,7 +131,7 @@ def delete_confrim(id):
     transactions_list = transactions[0]
     transactions_total = transactions[1]
   
-    return render_template('transactions/delete.html', transaction = transactions_list, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date = date, total = transactions_total)
+    return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date = date, total = transactions_total)
 
 @transaction_blueprint.route("/transactions/<id>/delete", methods = ['POST'])
 def delete_transaction(id):
