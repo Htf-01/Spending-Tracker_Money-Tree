@@ -13,6 +13,19 @@ Create Merchant form
 <p>{{date}}</p>
 <p>£{{(total[0]|string)[:-2]}}.{{((total[0])|string)[-2:]}}</p>
 
+<a href="merchants/nextmonth">Next Month</a>
+<a href="merchants/previousmonth">Previous Month</a>
+<a href="merchants/currentmonth">Current Month</a>
+
+<form action="merchants/month" method = "post">
+  <label for="date">Pick Budget</label>
+  <input type="month" name="date">
+  <button type="submit">submit</button>
+</form>
+
+
+
+
 <table>
     {% for merchant in groups %}
     <tr>

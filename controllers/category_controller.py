@@ -49,6 +49,39 @@ def update_category(id):
 # Delete
 
 
+#  SESSION HANDLING - Month View
+
+@category_blueprint.route("/categories/nextmonth")
+def categories_next_month():
+    
+    Transaction.session_increment(session)
+    
+    return redirect('/categories')
+
+@category_blueprint.route("/categories/previousmonth")
+def categories_previous_month():
+    
+    Transaction.session_decrement(session)
+    
+    return redirect('/categories')
+
+@category_blueprint.route("/categories/currentmonth")
+def categories_current_month():
+    
+    Transaction.session_current(session)
+    
+    return redirect('/categories')
+
+@category_blueprint.route("/categories/month", methods = ['POST'])
+def categories_select_month():
+    
+    date_string = request.form['date']
+    
+    Transaction.session_select(session,date_string)
+    
+    return redirect('/categories')
+
+
 
 
 

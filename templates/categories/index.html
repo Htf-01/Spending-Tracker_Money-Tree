@@ -13,6 +13,17 @@ Create Category form
 <p>{{date}}</p>
 <p>£{{(total[0]|string)[:-2]}}.{{((total[0])|string)[-2:]}}</p>
 
+<a href="categories/nextmonth">Next Month</a>
+<a href="categories/previousmonth">Previous Month</a>
+<a href="categories/currentmonth">Current Month</a>
+
+<form action="categories/month" method = "post">
+  <label for="date">Pick Budget</label>
+  <input type="month" name="date">
+  <button type="submit">submit</button>
+</form>
+
+
 <table>
     {% for category in groups %}
     <tr>

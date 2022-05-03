@@ -58,6 +58,39 @@ def update_merchant(id):
 # Delete
 
 
+# Session Handling
+
+@merchant_blueprint.route("/merchants/nextmonth")
+def merchants_next_month():
+    
+    Transaction.session_increment(session)
+    
+    return redirect('/merchants')
+
+@merchant_blueprint.route("/merchants/previousmonth")
+def merchants_previous_month():
+    
+    Transaction.session_decrement(session)
+    
+    return redirect('/merchants')
+
+@merchant_blueprint.route("/merchants/currentmonth")
+def merchants_current_month():
+    
+    Transaction.session_current(session)
+    
+    return redirect('/merchants')
+
+@merchant_blueprint.route("/merchants/month", methods = ['POST'])
+def merchants_select_month():
+    
+    date_string = request.form['date']
+    
+    Transaction.session_select(session,date_string)
+    
+    return redirect('/merchants')
+
+
 
 
 
