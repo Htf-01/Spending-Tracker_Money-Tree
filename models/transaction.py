@@ -23,11 +23,9 @@ class Transaction ():
         else:
             return date
         
-  #TEST      
-    def number_to_month(month_number):
-        if isinstance (month_number,int):
-            return datetime.strptime(str(month_number), "%m").strftime("%b")
-        return datetime.strptime(month_number, "%m").strftime("%b")
+        # Session functions
+    def session_today():
+       return date.today()                
     
     def session_date_display(session):
         month = datetime.strptime(str((session['current']['month'])), "%m").strftime("%b")
@@ -73,8 +71,6 @@ class Transaction ():
     def session_return_sort(session):
         return session['sort']['sort']
     
-    def session_today():
-       return date.today()                
         
 
         

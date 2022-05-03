@@ -1,4 +1,9 @@
 from flask import Flask, Blueprint, render_template, redirect, request, session
+# CSV imports
+import csv
+from datetime import datetime, date
+
+
 from repositories import transaction_repository
 from repositories import merchant_repository
 from repositories import category_repository
@@ -39,7 +44,7 @@ def new_transaction():
     return render_template("transactions/new.html", all_transactions = transactions, all_merchants = merchants, all_categories = categories, date=date)
 
 
-# POST '/tasks'
+# POST 
 @transaction_blueprint.route("/transactions/new", methods = ['POST'])
 def create_transaction():
     date = request.form['date']
@@ -171,3 +176,43 @@ def transactions_select_month():
     Transaction.session_select(session,date_string)
     
     return redirect('/transactions')
+
+@transaction_blueprint.route("/transactions/csv", methods = ['POST'])
+def transactions_import_csv():
+    
+    # Save file
+    file = request.files['upload_file']
+    if file.filename != '':
+        file.save(f'csv/{file.filename}')
+    
+    # Read file
+    example = open(f'csv/{file.filename}')
+    
+    transaction_upload = csv.DictReader(example)
+    # Iterate through file
+    for row in transaction_upload:
+       
+        # date
+        new_date = datetime.strptime(row['date'],'%d/%m/%Y').strftime('%Y-%m-%d')
+       
+        # merchant
+        merchant = merchant_repository.select_by_name(row['merchant'])
+        if merchant == False:
+            merchant = merchant_repository.select(merchant_repository.save(Merchant(row['merchant'])))
+            
+                # merchant
+        category = category_repository.select_by_name('None')
+        if category == False:
+            category = category_repository.select(category_repository.save(Category('None')))
+       
+        # amount
+        amount = (row['amount']).replace('.','')
+        
+        
+        transaction = Transaction(new_date,merchant,amount,category)
+        
+        transaction_repository.save(transaction)
+        
+    return redirect('/transactions')
+
+

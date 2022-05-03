@@ -1,4 +1,6 @@
 from flask import Flask, render_template, session
+from werkzeug.utils import secure_filename
+
 
 
 # Import Controllers
@@ -12,6 +14,11 @@ from models.transaction import Transaction
 app = Flask(__name__)
 
 app.secret_key = 'BAD_SECRET_KEY'
+
+# Upload folder
+UPLOAD_FOLDER = 'static/files'
+ALLOWED_EXTENSIONS = {'csv'}
+app.config['UPLOAD_FOLDER'] =  UPLOAD_FOLDER
 
 # Import Blueprints
 app.register_blueprint(transaction_blueprint)

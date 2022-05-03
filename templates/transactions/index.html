@@ -7,6 +7,12 @@
 <p>session date:{{date}}</p>
 <p>session date:{{date1}}</p>
 
+<form action="transactions/csv" method="post" enctype="multipart/form-data">
+  <input type="file" name= "upload_file">
+  
+  <button type="submit">submit</button>
+</form>
+
 
 <a href="transactions/nextmonth">Next Month</a>
 <a href="transactions/previousmonth">Previous Month</a>
