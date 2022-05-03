@@ -1,8 +1,10 @@
-from flask import Flask, Blueprint, render_template, redirect, request
+from flask import Flask, Blueprint, render_template, redirect, request, session
 
 from repositories import merchant_repository
+from repositories import transaction_repository
 
 from models.merchant import Merchant
+from models.transaction import Transaction
 
 
 merchant_blueprint = Blueprint("merchants", __name__)
@@ -11,9 +13,16 @@ merchant_blueprint = Blueprint("merchants", __name__)
 @merchant_blueprint.route("/merchants")
 def merchants():
 
-    merchants = merchant_repository.select_all()
 
-    return render_template("merchants/index.html", all_merchants = merchants)
+    date = Transaction.session_date_display(session)
+    date_values = Transaction.session_sql_format(session)
+    
+    merchant_groups = transaction_repository.select_by_group_merchant(date_values)[0]
+    merchant_total = transaction_repository.select_by_group_merchant(date_values)[1]
+
+ 
+    
+    return render_template("merchants/index.html",  groups = merchant_groups, date = date, total = merchant_total)
 
 # New
 
@@ -29,6 +38,12 @@ def create_merchant():
     return redirect('/merchants')
 
 # Show
+
+
+
+
+
+
 # Edit
 # Update
 @merchant_blueprint.route("/merchants/<id>", methods = ['POST'])

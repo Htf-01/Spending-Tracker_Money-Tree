@@ -104,6 +104,88 @@ def select(id):
         transaction = Transaction(result['transaction_date'], merchant, result['amount'],category, id)
     return transaction
 
+def select_by_group_merchant(values):
+    merchants = []
+    sql = '''Select id, amount
+            from merchants
+            full outer join
+            (SELECT t.merchant_id as merchant_id, sum(t.amount) as amount 
+            FROM transactions as t
+            right JOIN merchants as m
+            ON t.merchant_id = m.id
+            WHERE EXTRACT(MONTH FROM transaction_date) = %s
+            AND EXTRACT(YEAR FROM transaction_date) = %s
+            group by m.name, t.merchant_id)
+            as totals
+            on merchants.id = totals.merchant_id
+            order by activated desc, (amount is null), name
+            '''
+    results = run_sql(sql, values)
+    
+    sql_total = '''SELECT sum(t.amount)
+                FROM transactions as t
+                JOIN categories as c
+                ON t.category_id = c.id
+                JOIN merchants as m
+                ON t.merchant_id = m.id
+                WHERE extract (month from transaction_date) = %s
+                AND EXTRACT(YEAR FROM transaction_date) = %s
+                AND c.activated = True
+                AND m.activated = True'''
+    
+    total = run_sql(sql_total, values)[0]
+    
+    for row in results:
+        merchant = merchant_repository.select(row['id'])
+        amount = (row['amount'])
+        merchants.append([merchant,amount])
+    return merchants, total
+
+def select_by_group_category(values):
+    categories = []
+    sql = '''Select id, amount
+            from categories
+            full outer join
+            (SELECT t.category_id as category_id, sum(t.amount) as amount 
+            FROM transactions as t
+            right JOIN categories as c
+            ON t.category_id = c.id
+            WHERE EXTRACT(MONTH FROM transaction_date) = %s
+            AND EXTRACT(YEAR FROM transaction_date) = %s
+            group by c.name, t.category_id)
+            as totals
+            on categories.id = totals.category_id
+            order by activated desc, (amount is null), name
+            '''
+    results = run_sql(sql, values)
+    
+    sql_total = '''SELECT sum(t.amount)
+                FROM transactions as t
+                JOIN categories as c
+                ON t.category_id = c.id
+                JOIN merchants as m
+                ON t.merchant_id = m.id
+                WHERE extract (month from transaction_date) = %s
+                AND EXTRACT(YEAR FROM transaction_date) = %s
+                AND c.activated = True
+                AND m.activated = True'''
+    
+    total = run_sql(sql_total, values)[0]
+    
+    for row in results:
+        category = category_repository.select(row['id'])
+        amount = (row['amount'])
+        categories.append([category,amount])
+    return categories, total
+    
+    
+    
+
+
+
+
+
+
 # UPDATE
 ###############################################################
 def update(transaction):

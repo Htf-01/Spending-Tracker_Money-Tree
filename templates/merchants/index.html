@@ -10,22 +10,43 @@ Create Merchant form
     </form>
 </details>
 
+<p>{{date}}</p>
+<p>£{{(total[0]|string)[:-2]}}.{{((total[0])|string)[-2:]}}</p>
+
 <table>
-    {% for merchant in all_merchants %}
+    {% for merchant in groups %}
     <tr>
-        <th>{{merchant.name}}</th>
+        <th>{{merchant[0].name}}</th>
         <th>
-            <form action="/merchants/{{merchant.id}}" method="post">
-                {% if merchant.activated == True %}
+            <form action="/merchants/{{merchant[0].id}}" method="post">
+                {% if merchant[0].activated == True %}
                     <button type="submit" name="action" value ="action">Deactivate</button>
                 {% else %}
                     <button type="submit" name="action" value ="action">Activate</button>
                 {% endif %}
             </form>
         </th>
+        <th>
+            {% if merchant[1] != None %}
+                {% if merchant[0].activated == True %}
+                    <th>£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}}</th>
+                {% else %}
+                    <th>(£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}})</th>
+                {% endif %}
+            {% else %}
+            <th>£0.00</th>
+            {% endif %}
+        </th>
+        {% if merchant[1] != None %}
+            {% if merchant[0].activated == True %}
+        <th> <progress max = "100" value = "{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}"></progress> <p>{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}%</p>
+            </th>
+            {% endif %}
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
+
 
 
 {% endblock %}

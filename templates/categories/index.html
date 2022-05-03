@@ -10,19 +10,39 @@ Create Category form
     </form>
 </details>
 
+<p>{{date}}</p>
+<p>£{{(total[0]|string)[:-2]}}.{{((total[0])|string)[-2:]}}</p>
+
 <table>
-    {% for category in all_categories %}
+    {% for category in groups %}
     <tr>
-        <th>{{category.name}}</th>
+        <th>{{category[0].name}}</th>
         <th>
-            <form action="/categories/{{category.id}}" method="post">
-                {% if category.activated == True %}
+            <form action="/categories/{{category[0].id}}" method="post">
+                {% if category[0].activated == True %}
                     <button type="submit" name="action" value ="action">Deactivate</button>
                 {% else %}
                     <button type="submit" name="action" value ="action">Activate</button>
                 {% endif %}
             </form>
         </th>
+        <th>
+            {% if category[1] != None %}
+                {% if category[0].activated == True %}
+                    <th>£{{(category[1]|string)[:-2]}}.{{((category[1])|string)[-2:]}}</th>
+                {% else %}
+                    <th>(£{{(category[1]|string)[:-2]}}.{{((category[1])|string)[-2:]}})</th>
+                {% endif %}
+            {% else %}
+            <th>£0.00</th>
+            {% endif %}
+        </th>
+        {% if category[1] != None %}
+            {% if category[0].activated == True %}
+        <th> <progress max = "100" value = "{{('%0.2f'%(((category[1]|int)*100)/total[0]|int)|float)}}"></progress> <p>{{('%0.2f'%(((category[1]|int)*100)/total[0]|int)|float)}}%</p>
+            </th>
+            {% endif %}
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
