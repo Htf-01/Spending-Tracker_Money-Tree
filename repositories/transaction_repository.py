@@ -71,13 +71,26 @@ def select_all(values,sort):
                 ORDER BY amount desc'''
 
     results = run_sql(sql, values)
+    
+    sql_total = '''SELECT sum(t.amount)
+                FROM transactions as t
+                JOIN categories as c
+                ON t.category_id = c.id
+                JOIN merchants as m
+                ON t.merchant_id = m.id
+                WHERE extract (month from transaction_date) = %s
+                AND EXTRACT(YEAR FROM transaction_date) = %s
+                AND c.activated = True
+                AND m.activated = True'''
+    
+    total = run_sql(sql_total, values)[0]
 
     for row in results:
         merchant = merchant_repository.select(row['merchant_id'])
         category = category_repository.select(row['category_id'])
         transaction = Transaction(row['transaction_date'], merchant,row['amount'],category, row['id'])
         transactions.append(transaction)
-    return transactions
+    return transactions,total
 
 def select(id):
     transaction = None

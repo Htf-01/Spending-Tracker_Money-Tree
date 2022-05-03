@@ -23,9 +23,13 @@ def transactions():
     date = Transaction.session_date_display(session)
     date_values = Transaction.session_sql_format(session)
     
+    # breakpoint()
+    
     transactions = transaction_repository.select_all(date_values, sort)
+    transactions_list = transactions[0]
+    transactions_total = transactions[1]
 
-    return render_template("transactions/index.html", all_transactions = transactions, date = date)
+    return render_template("transactions/index.html", all_transactions = transactions_list, date = date, total = transactions_total, sort = sort)
 
 
 # Create
@@ -40,8 +44,10 @@ def new_transaction():
     date_values = Transaction.session_sql_format(session)
     
     transactions = transaction_repository.select_all(date_values, sort)
+    transactions_list = transactions[0]
+    transactions_total = transactions[1] 
 
-    return render_template("transactions/new.html", all_transactions = transactions, all_merchants = merchants, all_categories = categories, date=date)
+    return render_template("transactions/new.html", all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date=date, total = transactions_total)
 
 
 # POST 
@@ -79,8 +85,10 @@ def edit_transaction(id):
     date_values = Transaction.session_sql_format(session)
     
     transactions = transaction_repository.select_all(date_values, sort)
+    transactions_list = transactions[0]
+    transactions_total = transactions[1] 
 
-    return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date =date)
+    return render_template('transactions/edit.html', transaction = transactions_list, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date =date, total = transactions_total)
 
 # Update
 @transaction_blueprint.route("/transactions/<id>", methods = ['POST'])
@@ -122,8 +130,10 @@ def delete_confrim(id):
     date_values = Transaction.session_sql_format(session)
     
     transactions = transaction_repository.select_all(date_values, sort)
+    transactions_list = transactions[0]
+    transactions_total = transactions[1]
   
-    return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date = date)
+    return render_template('transactions/delete.html', transaction = transactions_list, all_transactions = transactions, all_merchants = merchants, all_categories = categories, date = date, total = transactions_total)
 
 @transaction_blueprint.route("/transactions/<id>/delete", methods = ['POST'])
 def delete_transaction(id):
@@ -200,7 +210,7 @@ def transactions_import_csv():
         if merchant == False:
             merchant = merchant_repository.select(merchant_repository.save(Merchant(row['merchant'])))
             
-                # merchant
+        # category
         category = category_repository.select_by_name('None')
         if category == False:
             category = category_repository.select(category_repository.save(Category('None')))

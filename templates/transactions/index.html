@@ -5,7 +5,8 @@
 <h1>Session Data</h1>
 
 <p>session date:{{date}}</p>
-<p>session date:{{date1}}</p>
+<p>£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</p>
+
 
 <form action="transactions/csv" method="post" enctype="multipart/form-data">
   <input type="file" name= "upload_file">
@@ -51,12 +52,27 @@
     </form>
   </tr>
 
+<!-- Set variable outside of for loop for cumulative total -->
+{% set balance = namespace(cumulative_total = total[0]) %}
+
 {% for transaction in all_transactions %}
   <tr class = "transaction row">
     <td>{{transaction.date_format()}}</td>
     <td>{{transaction.merchant.name}}</td>
-    <td>{{transaction.category.name}}</t>
-    <td>{{transaction.currency_format()}} {{transaction.id}}</td>
+    <td>{{transaction.category.name}}   id:{{transaction.id}}</td>
+    <td>
+      <!-- Only show cumulative total if the table has been ordered by date -->
+      {% if sort == 'transaction_date' %}
+        <ul>
+          <li>{{transaction.currency_format()}}</li>
+          <li>(£{{((balance.cumulative_total)|string)[:-2]}}.{{((balance.cumulative_total)|string)[-2:]}})</li>
+          {% set balance.cumulative_total = balance.cumulative_total - transaction.amount %}
+
+        </ul>
+      {% else %}
+      {{transaction.currency_format()}}  
+      
+    {% endif %}</td>
     <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
   </tr>
 {% endfor %}
