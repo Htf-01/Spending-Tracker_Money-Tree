@@ -1,6 +1,8 @@
+/* All */
+
 * {
     box-sizing: border-box;
-    background-color: bisque;
+    margin: 0;
 }
 
 input[type=number]::-webkit-inner-spin-button, 
@@ -9,29 +11,250 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0; 
 }
 
-
-.Transaction {
-    display:flex;
-    justify-content: space-around;
-    width: 100vw;
-    border: 1px solid blue
+body { 
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.add_form {
+
+  header {
+    background-color: #4DA2CC;
+    color: white;
+
+    width: 100vw;
+    height: 5em;
+    
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    height: 40px;
-    border: 1px solid black;
-    border-radius: 5px;
-    padding: 7px;
+    align-items: center;
 }
 
-.pence {
-    width: 2em;
+.brand {
+    display: flex;
+    justify-content: space-around;
+    width: 40vw;
 }
 
-.pounds {
+nav {
+    margin-right: 1em;
+}
+
+nav  * {
+    display: flex;
+    width: auto;
+
+    padding: 0.3em;
+    text-align: center;
+    list-style-type: none;
+    text-decoration: none;
+    color: white;
+
+}
+
+.highlight {
+    border-bottom: 2px double yellow;
+}
+
+/* main */
+main {
+  flex-grow: 1;
+  flex-shrink: 0;
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.titlebar {
+    background-color: #4DA2CC;
+    color: white;
+    border-bottom: 10px solid #1B3445;
+    
+    width: 100vw;
+    height: 3em;
+    
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+/* Navigation arrows */
+.titlebar a {
+    color: yellow;
+}
+
+.monthnav{
+    display: flex;
+    align-items: center;
+}
+
+.monthnav div{
+    padding: 0.5em;
+}
+
+.monthpicker {
     width: 5em;
+}
+
+.content {
+    display: flex;
+    background-color: grey;
+    flex-grow: 1;
+
+}
+
+.side {
+    width: 20%;
+}
+
+.table {
+    flex-grow: 1;
+}
+
+/* Table formatting */
+
+table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0px 2px;
+
+}
+
+table a,ul{
+    list-style-type: none;
+    text-decoration: none;
+    color: #1B3445;
+}
+
+
+
+    /* Rows */
+ 
+    thead button{
+        width: 100%;
+        height: 30px;
+        background-color:#1B3445;
+        color: white;
+        border: 1px solid white;
+        border-radius: 15px;
+    }
+
+    thead a {
+        color: white;
+    }
+        
+    tbody tr {
+
+        height: 60px;
+        background-color: whitesmoke;
+        color:#1B3445;
+    }
+
+    tbody #one { 
+        border-top-left-radius : 30px;
+        border-bottom-left-radius: 30px;
+    }
+
+    tbody #five {
+        border-top-right-radius: 30px;
+        border-bottom-right-radius: 30px; 
+    }
+
+    /* Columns */
+
+    .col{
+        width: 20%;
+    }
+    #four *{
+        text-align: right;
+    }
+
+    #cumulative {
+        color:#4c515481;
+    }
+
+    #five *{
+        padding: 0.5em;
+    }
+
+    .date {
+        width: 8em;
+    }
+
+    /* Add Transaction */
+
+    .pence {
+        width: 2em;
+    }
+    
+    .pounds {
+        width: 5em;
+    }
+
+    /* Edit Transaction */
+
+    #above, #below{
+            -webkit-filter: blur(5px);
+            -moz-filter: blur(5px);
+            -o-filter: blur(5px);
+            -ms-filter: blur(5px);
+            filter: blur(5px);
+            background-color: #ccc;
+          
+          }
+
+    #Deactivate {
+        background-color: #E9415E;
+        color: white;
+        border: 1px white;
+        width: 10em;
+        height: 25px;
+        border-radius: 15px;
+    }
+
+    #Activate {
+        background-color:#1B3445;
+        color: white;
+        border: 1px white;
+        width: 10em;
+        height: 25px;
+        border-radius: 15px;
+    }
+
+/* Footer */
+footer {
+    background-color: #4DA2CC;
+    
+    width: 100vw;
+    height: 3em;
+
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+}
+
+/* Weclome Page */
+
+.welcome {
+
+    width: 100vw;
+    height: 100vh;
+    background-image: linear-gradient(45deg, rgb(144, 100, 159) 0%, rgb(144, 100, 159) 24%,rgb(112, 112, 163) 24%, rgb(112, 112, 163) 28%,rgb(79, 124, 166) 28%, rgb(79, 124, 166) 40%,rgb(47, 136, 170) 40%, rgb(47, 136, 170) 84%,rgb(14, 148, 173) 84%, rgb(14, 148, 173) 100%),linear-gradient(0deg, rgb(144, 100, 159) 0%, rgb(144, 100, 159) 24%,rgb(112, 112, 163) 24%, rgb(112, 112, 163) 28%,rgb(79, 124, 166) 28%, rgb(79, 124, 166) 40%,rgb(47, 136, 170) 40%, rgb(47, 136, 170) 84%,rgb(14, 148, 173) 84%, rgb(14, 148, 173) 100%),linear-gradient(135deg, rgb(144, 100, 159) 0%, rgb(144, 100, 159) 24%,rgb(112, 112, 163) 24%, rgb(112, 112, 163) 28%,rgb(79, 124, 166) 28%, rgb(79, 124, 166) 40%,rgb(47, 136, 170) 40%, rgb(47, 136, 170) 84%,rgb(14, 148, 173) 84%, rgb(14, 148, 173) 100%),linear-gradient(90deg, rgb(79, 35, 157),rgb(43, 171, 222)); background-blend-mode:overlay,overlay,overlay,normal;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.welcome h1 {
+    color: white;
 }
 

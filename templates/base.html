@@ -6,25 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>Spending-Tracker</title>
+    <!-- Icons -->
+    <script src="https://kit.fontawesome.com/4c97a6d1fd.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
 <header>
-    <div class ="company_logo">
-        <h1>Company Name</h1>
-        <p>logo</p>
+    <div class ="brand">
+        <h1>Money Tree</h1>
+        <p></p>
     </div>
-    <ul class = "links">
-        <li><a href="/transactions">Transactions</a></li>
-        <li><a href="/merchants">Merchants</a></li>
-        <li><a href="/categories">Categories</a></li>
-    </ul>
+    <nav>
+        <ul class = "links">
+            {% if title == 'Home' %}
+                <li class = "highlight"><a href="/">Home</a></li>
+            {% else %}
+                <li><a href="/">Home</a></li>
+            {% endif %}
+            {% if title == 'Transactions' %}
+                <li class = "highlight"><a href="/transactions">Transactions</a></li>
+            {% else %}
+                <li><a href="/transactions">Transactions</a></li>
+            {% endif %}
+            {% if title == 'Merchants' %}
+                <li class = "highlight"><a href="/merchants">Merchants</a></li>
+            {% else %}
+                <li><a href="/merchants">Merchants</a></li>
+            {% endif %}
+            {% if title == 'Categories' %}
+                <li class = "highlight"><a href="/categories">Categories</a></li>
+            {% else %}
+                <li><a href="/categories">Categories</a></li>
+            {% endif %}
+        </ul>
+    </nav>
 </header>
 
 <main>
-    {% block content %}
-
-    {% endblock%}
+        {% block content %}
+        
+        
+        {% endblock%}
 </main>
+<footer>
+</footer>
 </body>
 </html>

@@ -27,7 +27,11 @@ def transactions():
     transactions_list = transactions[0]
     transactions_total = transactions[1]
 
-    return render_template("transactions/index.html", all_transactions = transactions_list, date = date, total = transactions_total, sort = sort)
+    return render_template("transactions/index.html",
+                           all_transactions = transactions_list,
+                           date = date, total = transactions_total,
+                           sort = sort,
+                           title = 'Transactions')
 
 
 # Create
@@ -45,7 +49,13 @@ def new_transaction():
     transactions_list = transactions[0]
     transactions_total = transactions[1] 
 
-    return render_template("transactions/new.html", all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date=date, total = transactions_total)
+    return render_template("transactions/new.html", 
+                           all_transactions = transactions_list,
+                           all_merchants = merchants,
+                           all_categories = categories,
+                           date=date,
+                           total = transactions_total,
+                           title = 'Transactions')
 
 
 # POST 
@@ -86,7 +96,14 @@ def edit_transaction(id):
     transactions_list = transactions[0]
     transactions_total = transactions[1] 
 
-    return render_template('transactions/edit.html', transaction = transaction, all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date =date, total = transactions_total)
+    return render_template('transactions/edit.html',
+                           transaction = transaction,
+                           all_transactions = transactions_list,
+                           all_merchants = merchants,
+                           all_categories = categories,
+                           date =date,
+                           total = transactions_total,
+                           title = 'Transactions')
 
 # Update
 @transaction_blueprint.route("/transactions/<id>", methods = ['POST'])
@@ -131,7 +148,14 @@ def delete_confrim(id):
     transactions_list = transactions[0]
     transactions_total = transactions[1]
   
-    return render_template('transactions/delete.html', transaction = transaction, all_transactions = transactions_list, all_merchants = merchants, all_categories = categories, date = date, total = transactions_total)
+    return render_template('transactions/delete.html',
+                           transaction = transaction,
+                           all_transactions = transactions_list,
+                           all_merchants = merchants,
+                           all_categories = categories,
+                           date = date,
+                           total = transactions_total,
+                           title = 'Transactions')
 
 @transaction_blueprint.route("/transactions/<id>/delete", methods = ['POST'])
 def delete_transaction(id):

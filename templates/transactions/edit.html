@@ -1,103 +1,153 @@
-<table class = "transactions">
-  <tr>
-    <th class = "col1">
-      <button><a href="/transactions/new">Add Transaction</a></button>
-    </th>
-    <th class = "col2"></th>
-    <th class = "col3"></th>
-    <th class = "col4"></th>
-    <th class = "col5"></th>
-  </tr>
-  
-  <tr class = "transaction_title_row">
-      <!-- <form action="/transactions/sort" method = "post">       Removed the sort functionality for when a transaction is being added/edited         -->
-        <th class = "col1"><button type="submit" name="button" value = "transaction_date">Date</button></th>
-        <th class = "col2"><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
-        <th class = "col3"><button type="submit" name="button" value = "category_id">Category</button></th>
-        <th class = "col4"><button type="submit" name="button" value = "amount">Amount</button></th>
-        <th class = "col5">Edit Functions</th>
-      <!-- </form> -->
-  </tr>
-<!-- Section of table above ID -->
+{% extends 'base.html'%}
+{% block content %}
 
-{% set show_transaction = namespace(Tag=0) %}
+<div class = "titlebar">
+  <!-- Page Title -->
+  <h2>{{title}}</h2>
+  <!-- Total -->
+  <h2>Total: £{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</h2>
+  <!-- Month Nav -->
+  <div class = "monthnav">
+      <!-- Previous Month -->
+      <div>
+        <h2>
+          <a href="/transactions/previousmonth" title="Previous Month"><i class="fa-solid fa-chevron-left"></i></a>
+        </h2>
+      </div>
+    <!-- Display Month -->
+      <div>
+        <h2>{{date}}</h2>
+      </div>
+    <!-- Next Month -->
+      <div>
+        <h2>
+          <a href="/transactions/nextmonth" title="Next Month"><i class="fa-solid fa-chevron-right"></i></a>
+        </h2>
+      </div>
+      <!-- Month Picker -->
+      <div>
+        <form action="transactions/month" method = "post">
+          <input type="month" name="date" class = "monthpicker">
+          <button type="submit">submit</button>
+        </form>
+      </div>
+  </div>
+</div>
 
-{% for above_transaction in all_transactions %}
-  {% if show_transaction.Tag == 0 %}
-    {% if (above_transaction.id|int) != (transaction.id|int) %}
-      <tr class = "transaction row">
-        <td>{{above_transaction.date_format()}}</td>
-        <td>{{above_transaction.merchant.name}}</td>
-        <td>{{above_transaction.Tag}}</td>
-        <td>{{above_transaction.currency_format()}}</td>
-        <td><a href="/transactions/{{above_transaction.id}}/edit">Edit</a> <a href="/transactions/{{above_transaction.id}}/delete">Delete</a></td>
+<div class = "content">
+  <div class = "side"></div>
+  <div class="table">
+    <table class = "transactions">
+      <thead>
+        <form action="transactions/csv" method="post" enctype="multipart/form-data">
+      <tr>
+        <td colspan="3"></td>
+        <td colspan="2">
+          <input type="file" name= "upload_file">
+        </td>
       </tr>
-    {% else %}
-      {% set show_transaction.Tag = 1 %}  
-    {% endif %}
-  {% endif %}    
-{% endfor %}
-
-
-<!-- form for ID-->
-<tr class ="transaction row">
-  <form action="/transactions/{{transaction.id}}" method="post">
-    <!-- date picker -->
-    <th><input type="date" id="date" name="date" value="{{transaction.date}}"></th>
-    <!-- merchant picker -->
-    <th>
-      <input type="text" id= "merchant" name = "merchant" list="merchants" value = "{{transaction.merchant.name}}" />
-      <datalist id = "merchants">
-        {% for merchant in all_merchants %}
-          <option value = "{{merchant.name}}"> 
-        {% endfor %}
-      </datalist>
-    </th>
-    <!-- category picker -->
-    <th>
-      <input type="text" id= "category" name = "category" list="categories" value = "{{transaction.category.name}}"  />
-      <datalist id = "categories">
-        {% for category in all_categories %}
-          <option value = "{{category.name}}"> 
-        {% endfor %}
-      </datalist>
-    </th>
-    <!-- Amount picker -->
-    <th>
-      <span>£</span>
-      <input type="number" name="amount_pound" class = "pounds" min = "00" max = "99999" value = "{{((transaction.amount|string)[:-2]|int)}}">
-      <span>.</span>
-      <input type="number" name="amount_pence" class = "pence" min = "00" max = "99" step = "01" value = "{{((transaction.amount|string)[-2:]|int)}}">
-    </th>
-    <!-- Confirmation/Submit -->
-    <th>
-      <button><a href="/transactions">Cancel</a></button>
-      <button type="submit">Confirm Edit</button>
-    </th>
-  </form>
-</tr>
-<!-- end form for ID-->
-
-  <!-- Section of table below ID -->
-{% set show_transaction = namespace(Tag=0) %}
-  {% for below_transaction in all_transactions %}
-    {% if (below_transaction.id|int) != (transaction.id|int) and show_transaction.Tag == 1 %}
-        <tr class = "transaction row">
-          <td>{{below_transaction.date_format()}}</td>
-          <td>{{below_transaction.merchant.name}}</td>
-          <td>{{below_transaction.Tag}}</td>
-          <td>{{below_transaction.currency_format()}}</td>
-          <td><a href="/transactions/{{below_transaction.id}}/edit">Edit</a> <a href="/transactions/{{below_transaction.id}}/delete">Delete</a></td>
+          <tr class = "actions">
+        <td colspan="3">
+          <button id = "addtransaction"><a href="/transactions/new"> <i class="fa-solid fa-plus"></i>  Add Transaction</a></button>
+        </td>
+        <td colspan="2">
+            <button type="submit">Submit CSV</button>
+          </form>
+        </td>
+      </tr>
+        <tr class = "titlerow">
+        <form action="/transactions/sort" method = "post">
+          <th class = "col" ><button type="submit" name="button" value = "transaction_date">Date</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "category_id">Category</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "amount">Amount</button></th>
+          <th class = "col" ></th>
+        </form>
+      </tr>
+    </thead>
+      <tbody>
+        
+  {% set show_transaction = namespace(Tag=0) %}
+  
+  {% for above_transaction in all_transactions %}
+    {% if show_transaction.Tag == 0 %}
+      {% if (above_transaction.id|int) != (transaction.id|int) %}
+        <tr id = "above">
+          <th class = "col" id="one">{{above_transaction.date_format()}}</th>
+          <th class = "col" id="two">{{above_transaction.merchant.name}}</th>
+          <th class = "col" id="three">{{above_transaction.category.name}}</th>
+          <th class = "col" id="four">{{transaction.currency_format()}}</th>
+          <th class = "col" id="five"><a title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> <a title="Delete"><i class="fa-solid fa-trash"></i></a></th>
         </tr>
-    {% elif (below_transaction.id|int) == (transaction.id|int) %}
-      {% set show_transaction.Tag = 1 %}          
-    {% else %}
-    {% endif %}
+      {% else %}
+        {% set show_transaction.Tag = 1 %}  
+      {% endif %}
+    {% endif %}    
   {% endfor %}
-<tr class = "transaction row">
-  <td></td>
-  <td></td>
-  <td></td>
-  <td>Total</td>
-</tr>
-</table>
+  
+  <!-- form for ID-->
+  <tr class ="transaction row">
+    <form action="/transactions/{{transaction.id}}" method="post">
+      <!-- date picker -->
+      <th class = "col" id="one"><input type="date" id="date" name="date" value="{{transaction.date}}"></th>
+      <!-- merchant picker -->
+      <th class = "col" id="two">
+        <input type="text" id= "merchant" name = "merchant" list="merchants" value = "{{transaction.merchant.name}}" />
+        <datalist id = "merchants">
+          {% for merchant in all_merchants %}
+            <option value = "{{merchant.name}}"> 
+          {% endfor %}
+        </datalist>
+      </th>
+      <!-- category picker -->
+      <th class = "col" id="three">
+        <input type="text" id= "category" name = "category" list="categories" value = "{{transaction.category.name}}"  />
+        <datalist id = "categories">
+          {% for category in all_categories %}
+            <option value = "{{category.name}}"> 
+          {% endfor %}
+        </datalist>
+      </th>
+      <!-- Amount picker -->
+      <th class = "col" id="four">
+        <span>£</span>
+        <input type="number" name="amount_pound" class = "pounds" min = "00" max = "99999" value = "{{((transaction.amount|string)[:-2]|int)}}">
+        <span>.</span>
+        <input type="number" name="amount_pence" class = "pence" min = "00" max = "99" step = "01" value = "{{((transaction.amount|string)[-2:]|int)}}">
+      </th>
+      <!-- Confirmation/Submit -->
+      <th class = "col" id="five">
+        <button><a href="/transactions">Cancel</a></button>
+        <button type="submit">Confirm Edit</button>
+      </th>
+    </form>
+  </tr>
+  <!-- end form for ID-->
+  
+  {% set show_transaction = namespace(Tag=0) %}
+  {% for below_transaction in all_transactions %}
+  {% if (below_transaction.id|int) != (transaction.id|int) and show_transaction.Tag == 1 %}
+  <tr id = "below">
+    <th class = "col" id="one">{{below_transaction.date_format()}}</th>
+    <th class = "col" id="two"><a >{{below_transaction.merchant.name}}</a></th>
+    <th class = "col" id="three"><a>{{below_transaction.category.name}}   
+    <th class = "col" id="four">{{below_transaction.currency_format()}}</th>
+    <th class = "col" id="five"><a href="/transactions/{{transaction.id}}/edit" title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> <a href="/transactions/{{transaction.id}}/delete" title="Delete"><i class="fa-solid fa-trash"></i></a></th>
+  </tr>
+  {% elif (below_transaction.id|int) == (transaction.id|int) %}
+  {% set show_transaction.Tag = 1 %}          
+  {% else %}
+  {% endif %}
+  {% endfor %}
+  
+    
+    
+    
+    
+    </tbody>
+    </table>
+  </div>
+  <div class = "side"></div>
+</div>
+
+{% endblock %}

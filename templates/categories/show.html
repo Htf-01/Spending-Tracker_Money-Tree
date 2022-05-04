@@ -1,50 +1,44 @@
 {% extends 'base.html'%}
 {% block content %}
 
+<div class = "titlebar">
+  <!-- Page Title -->
+  <h2>{{title}}</h2>
+  <!-- Total -->
+  <h2>Total: £{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</h2>
+  <!-- Month Nav -->
+</div>
 
-
-
-<h1>{{category.name}}</h1>
-
-<p>£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</p>
-
-
-
-<table class = "transactions">
-    <tr>
-      <th class = "col1">
-      </th>
-      <th class = "col2"></th>
-      <th class = "col3"></th>
-      <th class = "col4"></th>
-    </tr>
-  
-  
-    <tr class = "transaction_title_row">
-      <form action="/categories/{{category.id}}/sort" method = "post">
-        <th><button type="submit" name="button" value = "transaction_date">Date</button></th>
-        <th><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
-        <th><button type="submit" name="button" value = "category_id">Category</button></th>
-        <th><button type="submit" name="button" value = "amount">Amount</button></th>
-      </form>
-    </tr>
-  
-  {% for transaction in transactions %}
-    <tr class = "transaction row">
-      <td>{{transaction.date_format()}}</td>
-      <td>{{transaction.merchant.name}}</td>
-      <td>{{transaction.category.name}}</td>
-      <td>{{transaction.currency_format()}}</td>
-    </tr>
-  {% endfor %}
-    <tr class = "transaction_row">
-      <td></td>
-      <td></td>
-      <td></td>
-      <td>Total:£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</td>
-    </tr>
-  </table>
-</table>
-
+<div class = "content">
+  <div class = "side"></div>
+  <div class = "table">
+    <table class = "transactions">
+      <thead>
+        <tr class = "titlerow">
+        <form action="/categories/{{category.id}}/sort" method = "post">
+          <th class = "col" ><button type="submit" name="button" value = "transaction_date">Date</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "category_id">Category</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "amount">Amount</button></th>
+          <th class = "col" ></th>
+        </form>
+      </tr>
+    </thead>
+      <tbody>
+        <!-- Set variable outside of for loop for cumulative total -->
+        {% for transaction in transactions %}
+        <tr class = "transaction row">
+          <th class="col" id="one">{{transaction.date_format()}}</th>
+          <th class="col" id="two"><a href="/merchants/{{transaction.merchant.id}}">{{transaction.merchant.name}}</a></th>
+          <th class="col" id="three">{{transaction.category.name}}</th>
+          <th class="col" id="four">{{transaction.currency_format()}}</th>
+          <th class="col" id="five"></th>
+        </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  <div class = "side"></div>
+</div>
 
 {% endblock %}

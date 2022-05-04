@@ -1,64 +1,98 @@
 {% extends 'base.html'%}
 {% block content %}
 
-Create Merchant form
-<details>
-    <summary>Create Merchant</summary>
-    <form action="/merchants" method="post">
-        <input type="text" name ='name'>
-        <input type="submit">
-    </form>
-</details>
+<div class = "titlebar">
+    <!-- Page Title -->
+    <h2>{{title}}</h2>
+    <!-- Total -->
+    <h2>Total: £{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</h2>
+    <!-- Month Nav -->
+    <div class = "monthnav">
+        <!-- Previous Month -->
+        <div>
+          <h2>
+            <a href="/merchants/previousmonth" title="Previous Month"><i class="fa-solid fa-chevron-left"></i></a>
+          </h2>
+        </div>
+      <!-- Display Month -->
+        <div>
+          <h2>{{date}}</h2>
+        </div>
+      <!-- Next Month -->
+        <div>
+          <h2>
+            <a href="/merchants/nextmonth" title="Next Month"><i class="fa-solid fa-chevron-right"></i></a>
+          </h2>
+        </div>
+        <!-- Month Picker -->
+        <div>
+          <form action="merchants/month" method = "post">
+            <input type="month" name="date" class = "monthpicker">
+            <button type="submit">submit</button>
+          </form>
+        </div>
+    </div>
+  </div>
 
-<p>{{date}}</p>
-<p>£{{(total[0]|string)[:-2]}}.{{((total[0])|string)[-2:]}}</p>
-
-<a href="merchants/nextmonth">Next Month</a>
-<a href="merchants/previousmonth">Previous Month</a>
-<a href="merchants/currentmonth">Current Month</a>
-
-<form action="merchants/month" method = "post">
-  <label for="date">Pick Budget</label>
-  <input type="month" name="date">
-  <button type="submit">submit</button>
-</form>
-
-
-
-
-<table>
-    {% for merchant in groups %}
-    <tr>
-        <th><a href="/merchants/{{merchant[0].id}}">{{merchant[0].name}}</a></th>
-        <th>
-            <form action="/merchants/{{merchant[0].id}}" method="post">
-                {% if merchant[0].activated == True %}
-                    <button type="submit" name="action" value ="action">Deactivate</button>
-                {% else %}
-                    <button type="submit" name="action" value ="action">Activate</button>
-                {% endif %}
-            </form>
-        </th>
-        <th>
-            {% if merchant[1] != None %}
-                {% if merchant[0].activated == True %}
-                    <th>£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}}</th>
-                {% else %}
-                    <th>(£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}})</th>
-                {% endif %}
-            {% else %}
-            <th>£0.00</th>
-            {% endif %}
-        </th>
-        {% if merchant[1] != None %}
-            {% if merchant[0].activated == True %}
-        <th> <progress max = "100" value = "{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}"></progress> <p>{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}%</p>
-            </th>
-            {% endif %}
-        {% endif %}
-    </tr>
-    {% endfor %}
-</table>
+<div class = "content">
+    <div class = "side"></div>
+    <div class="table">
+        <table class = "transactions">
+          <thead>
+            <tr>
+                <form action="/merchants" method="post">
+                <td colspan="2"></td>
+                <th class = "col" ><button >Create Merchant:</button></th>
+                <td>
+                    <input type="text" name ='name'>
+                </td>
+                <td><input type="submit"></td>
+            </tr>
+            <tr class = "titlerow">
+              <th class = "col" ><button >Merchant</button></th>
+              <th class = "col" ><button >Activate/Deactivate</button></th>
+              <th class = "col" ><button >Total</button></th>
+              <th class = "col" colspan="2"><button >Percent Spend</button></th>
+            </tr>
+        </thead>
+          <tbody>
+            {% for merchant in groups %}
+            <tr>
+                <th class = "col" id="one"><a href="/merchants/{{merchant[0].id}}">{{merchant[0].name}}</a></th>
+                <th class = "col" id="two">
+                    <form action="/merchants/{{merchant[0].id}}" method="post">
+                        {% if merchant[0].activated == True %}
+                            <button type="submit" name="action" value ="action" id ="Deactivate">Deactivate</button>
+                        {% else %}
+                            <button type="submit" name="action" value ="action" id ="Activate">Activate</button>
+                        {% endif %}
+                    </form>
+                </th>
+                    {% if merchant[1] != None %}
+                    {% if merchant[0].activated == True %}
+                        <th class = "col" id="three">£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}}</th>
+                    {% else %}
+                        <th class = "col" id="three">(£{{(merchant[1]|string)[:-2]}}.{{((merchant[1])|string)[-2:]}})</th>
+                    {% endif %}
+                    {% else %}
+                        <th class = "col" id="three">£0.00</th>
+                    {% endif %}
+                    {% if merchant[1] != None %}
+                    {% if merchant[0].activated == True %}
+                        <th colspan="2" id="five"> <progress max = "100" value = "{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}"></progress> <p>{{('%0.2f'%(((merchant[1]|int)*100)/total[0]|int)|float)}}%</p></th>
+                    {% else %}
+                        <th colspan="2" id="five"></th>
+                    {% endif %}           
+                    {% else %}
+                        <th colspan="2" id="five"></th>
+                    {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    <div class = "side"></div>
+</div>
 
 
 

@@ -22,7 +22,11 @@ def merchants():
 
  
     
-    return render_template("merchants/index.html",  groups = merchant_groups, date = date, total = merchant_total)
+    return render_template("merchants/index.html",
+                           groups = merchant_groups,
+                           date = date,
+                           total = merchant_total,
+                           title = 'Merchants')
 
 # New
 
@@ -43,13 +47,19 @@ def show_merchant(id):
 
     merchant = merchant_repository.select(id)
     
+    title = merchant.name
+    
     sort = Transaction.session_return_sort(session)
     transactions = transaction_repository.select_all_merchant(merchant,sort)[0]
     total = transaction_repository.select_all_merchant(merchant,sort)[1] 
 
 
     
-    return render_template("merchants/show.html", merchant = merchant, transactions = transactions, total = total)
+    return render_template("merchants/show.html",
+                           merchant = merchant,
+                           transactions = transactions,
+                           total = total,
+                           title = title)
 
 
 

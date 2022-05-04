@@ -19,7 +19,11 @@ def categories():
     category_groups = transaction_repository.select_by_group_category(date_values)[0]
     category_total = transaction_repository.select_by_group_category(date_values)[1]
 
-    return render_template("categories/index.html", groups = category_groups, date = date, total = category_total)
+    return render_template("categories/index.html",
+                           groups = category_groups,
+                           date = date,
+                           total = category_total,
+                           title = 'Categories')
 
 # New
 
@@ -41,13 +45,19 @@ def show_category(id):
 
     category = category_repository.select(id)
     
+    title = category.name
+    
     sort = Transaction.session_return_sort(session)
     transactions = transaction_repository.select_all_category(category,sort)[0]
     total = transaction_repository.select_all_category(category,sort)[1] 
     
 
     
-    return render_template("categories/show.html", category = category, transactions = transactions, total = total)
+    return render_template("categories/show.html",
+                           category = category,
+                           transactions = transactions,
+                           total = total,
+                           title =  title)
 
 
 

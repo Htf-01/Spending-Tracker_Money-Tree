@@ -33,7 +33,7 @@ def home():
     session['current'] = {'month':(Transaction.session_today().month), 'year':(Transaction.session_today().year)}
     session['sort']={'sort':'transaction_date'}
         
-    return render_template('index.html')
+    return render_template('index.html', title = 'Home')
 
 if __name__ == '__main__':
     app.run(debug=True)

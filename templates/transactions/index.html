@@ -1,88 +1,100 @@
 {% extends 'base.html'%}
 {% block content %}
 
-<div>
-<h1>Session Data</h1>
-
-<p>session date:{{date}}</p>
-<p>£{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</p>
-
-
-<form action="transactions/csv" method="post" enctype="multipart/form-data">
-  <input type="file" name= "upload_file">
-  
-  <button type="submit">submit</button>
-</form>
-
-
-<a href="transactions/nextmonth">Next Month</a>
-<a href="transactions/previousmonth">Previous Month</a>
-<a href="transactions/currentmonth">Current Month</a>
-
-<form action="transactions/month" method = "post">
-  <label for="date">Pick Budget</label>
-  <input type="month" name="date">
-  <button type="submit">submit</button>
-</form>
-
+<div class = "titlebar">
+  <!-- Page Title -->
+  <h2>{{title}}</h2>
+  <!-- Total -->
+  <h2>Total: £{{(total[0]|string)[:-2]}}.{{(total[0]|string)[-2:]}}</h2>
+  <!-- Month Nav -->
+  <div class = "monthnav">
+      <!-- Previous Month -->
+      <div>
+        <h2>
+          <a href="/transactions/previousmonth" title="Previous Month"><i class="fa-solid fa-chevron-left"></i></a>
+        </h2>
+      </div>
+    <!-- Display Month -->
+      <div>
+        <h2>{{date}}</h2>
+      </div>
+    <!-- Next Month -->
+      <div>
+        <h2>
+          <a href="/transactions/nextmonth" title="Next Month"><i class="fa-solid fa-chevron-right"></i></a>
+        </h2>
+      </div>
+      <!-- Month Picker -->
+      <div>
+        <form action="transactions/month" method = "post">
+          <input type="month" name="date" class = "monthpicker">
+          <button type="submit">submit</button>
+        </form>
+      </div>
+  </div>
 </div>
 
-
-
-
-<table class = "transactions">
-  <tr>
-    <th class = "col1">
-      <button><a href="transactions/new">Add Transaction</a></button>
-    </th>
-    <th class = "col2"></th>
-    <th class = "col3"></th>
-    <th class = "col4"></th>
-    <th class = "col5"></th>
-  </tr>
-
-
-  <tr class = "transaction_title_row">
-    <form action="/transactions/sort" method = "post">
-      <th><button type="submit" name="button" value = "transaction_date">Date</button></th>
-      <th><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
-      <th><button type="submit" name="button" value = "category_id">Category</button></th>
-      <th><button type="submit" name="button" value = "amount">Amount</button></th>
-      <th>Edit Functions</th>
-    </form>
-  </tr>
-
-<!-- Set variable outside of for loop for cumulative total -->
-{% set balance = namespace(cumulative_total = total[0]) %}
-
-{% for transaction in all_transactions %}
-  <tr class = "transaction row">
-    <td>{{transaction.date_format()}}</td>
-    <td>{{transaction.merchant.name}}</td>
-    <td>{{transaction.category.name}}   id:{{transaction.id}}</td>
-    <td>
-      <!-- Only show cumulative total if the table has been ordered by date -->
-      {% if sort == 'transaction_date' %}
-        <ul>
-          <li>{{transaction.currency_format()}}</li>
-          <li>(£{{((balance.cumulative_total)|string)[:-2]}}.{{((balance.cumulative_total)|string)[-2:]}})</li>
-          {% set balance.cumulative_total = balance.cumulative_total - transaction.amount %}
-
-        </ul>
-      {% else %}
-      {{transaction.currency_format()}}  
-      
-    {% endif %}</td>
-    <td><a href="/transactions/{{transaction.id}}/edit">Edit</a> <a href="/transactions/{{transaction.id}}/delete">Delete</a></td>
-  </tr>
-{% endfor %}
-  <tr class = "transaction_row">
-    <td></td>
-    <td></td>
-    <td></td>
-    <td>Total: </td>
-  </tr>
-</table>
+<div class = "content">
+  <div class = "side"></div>
+  <div class = "table">
+    <table class = "transactions">
+        <thead>
+        <form action="transactions/csv" method="post" enctype="multipart/form-data">
+      <tr>
+        <td colspan="3"></td>
+        <td colspan="2">
+          <input type="file" name= "upload_file">
+        </td>
+      </tr>
+          <tr class = "actions">
+        <td colspan="3">
+          <button id = "addtransaction"><a href="transactions/new"> <i class="fa-solid fa-plus"></i>  Add Transaction</a></button>
+        </td>
+        <td colspan="2">
+            <button type="submit">Submit CSV</button>
+          </form>
+        </td>
+      </tr>
+        <tr class = "titlerow">
+        <form action="/transactions/sort" method = "post">
+          <th class = "col" ><button type="submit" name="button" value = "transaction_date">Date</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "merchant_id">Merchant</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "category_id">Category</button></th>
+          <th class = "col" ><button type="submit" name="button" value = "amount">Amount</button></th>
+          <th class = "col" ></th>
+        </form>
+      </tr>
+    </thead>
+      <tbody>
+        <!-- Set variable outside of for loop for cumulative total -->
+        {% set balance = namespace(cumulative_total = total[0]) %}
+    
+    {% for transaction in all_transactions %}
+      <tr class = "transactionrow">
+        <th class = "col" id="one">{{transaction.date_format()}}</th>
+        <th class = "col" id="two"><a href="/merchants/{{transaction.merchant.id}}">{{transaction.merchant.name}}</a></th>
+        <th class = "col" id="three"><a href="/categories/{{transaction.category.id}}">{{transaction.category.name}}   
+        <th class = "col" id="four">
+          <!-- Only show cumulative total if the table has been ordered by date -->
+          {% if sort == 'transaction_date' %}
+            <ul>
+              <li>{{transaction.currency_format()}}</li>
+              <li id="cumulative">£{{((balance.cumulative_total)|string)[:-2]}}.{{((balance.cumulative_total)|string)[-2:]}}</li>
+              {% set balance.cumulative_total = balance.cumulative_total - transaction.amount %}
+    
+            </ul>
+          {% else %}
+          {{transaction.currency_format()}}  
+          
+        {% endif %}</th>
+        <th class = "col" id="five"><a href="/transactions/{{transaction.id}}/edit" title="Edit"><i class="fa-solid fa-pen-to-square"></i></a> <a href="/transactions/{{transaction.id}}/delete" title="Delete"><i class="fa-solid fa-trash"></i></a></th>
+      </tr>
+      {% endfor %}
+    </tbody>
+    </table>
+  </div>
+  <div class = "side"></div>
+</div>
 
 
 {% endblock %}
