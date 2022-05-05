@@ -26,6 +26,10 @@ def transactions():
     transactions = transaction_repository.select_all(date_values, sort)
     transactions_list = transactions[0]
     transactions_total = transactions[1]
+    if transactions_total == [None]:
+        transactions_total = ['000']
+    # breakpoint()
+    
 
     return render_template("transactions/index.html",
                            all_transactions = transactions_list,
@@ -47,7 +51,9 @@ def new_transaction():
     
     transactions = transaction_repository.select_all(date_values, sort)
     transactions_list = transactions[0]
-    transactions_total = transactions[1] 
+    transactions_total = transactions[1]
+    if transactions_total == [None]:
+        transactions_total = ['000'] 
 
     return render_template("transactions/new.html", 
                            all_transactions = transactions_list,
@@ -94,7 +100,9 @@ def edit_transaction(id):
     
     transactions = transaction_repository.select_all(date_values, sort)
     transactions_list = transactions[0]
-    transactions_total = transactions[1] 
+    transactions_total = transactions[1]
+    if transactions_total == [None]:
+        transactions_total = ['000']  
 
     return render_template('transactions/edit.html',
                            transaction = transaction,
@@ -147,6 +155,8 @@ def delete_confrim(id):
     transactions = transaction_repository.select_all(date_values, sort)
     transactions_list = transactions[0]
     transactions_total = transactions[1]
+    if transactions_total == [None]:
+        transactions_total = ['000'] 
   
     return render_template('transactions/delete.html',
                            transaction = transaction,

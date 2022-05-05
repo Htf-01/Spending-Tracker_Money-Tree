@@ -19,6 +19,8 @@ def merchants():
     
     merchant_groups = transaction_repository.select_by_group_merchant(date_values)[0]
     merchant_total = transaction_repository.select_by_group_merchant(date_values)[1]
+    if merchant_total == [None]:
+        merchant_total = ['000'] 
 
  
     
@@ -51,7 +53,9 @@ def show_merchant(id):
     
     sort = Transaction.session_return_sort(session)
     transactions = transaction_repository.select_all_merchant(merchant,sort)[0]
-    total = transaction_repository.select_all_merchant(merchant,sort)[1] 
+    total = transaction_repository.select_all_merchant(merchant,sort)[1]
+    if total == [None]:
+        total = ['000']  
 
 
     
