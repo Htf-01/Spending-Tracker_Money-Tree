@@ -13,6 +13,8 @@ from models.transaction import Transaction
 
 app = Flask(__name__)
 
+
+# Simulating a secure user login so that session data can be used.
 app.secret_key = 'BAD_SECRET_KEY'
 
 # Upload folder

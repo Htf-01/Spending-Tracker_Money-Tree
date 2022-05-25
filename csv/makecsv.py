@@ -7,7 +7,7 @@ import datetime
 
 
 # Number of entries you want
-records=300
+records=100
 
 fieldnames=['date','merchant','amount']
 writer = csv.DictWriter(open("example.csv", "w"), fieldnames=fieldnames)
